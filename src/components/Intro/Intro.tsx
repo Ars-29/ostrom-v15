@@ -58,13 +58,51 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
   // Handle body scroll locking and navbar hiding in landscape mode
   useEffect(() => {
     if (isMobile && isLandscape) {
-      // Lock body scroll aggressively
+      // Request fullscreen mode (like YouTube) to hide browser UI
+      const requestFullscreen = async () => {
+        const introElement = document.getElementById('intro-trigger');
+        if (introElement && !document.fullscreenElement) {
+          try {
+            if (introElement.requestFullscreen) {
+              await introElement.requestFullscreen();
+            } else if ((introElement as any).webkitRequestFullscreen) {
+              // iOS Safari webkit prefix
+              await (introElement as any).webkitRequestFullscreen();
+            } else if ((introElement as any).mozRequestFullScreen) {
+              // Firefox
+              await (introElement as any).mozRequestFullScreen();
+            } else if ((introElement as any).msRequestFullscreen) {
+              // IE/Edge
+              await (introElement as any).msRequestFullscreen();
+            }
+          } catch (error) {
+            console.log('Fullscreen not supported or failed:', error);
+          }
+        }
+      };
+      
+      requestFullscreen();
+      
+      // Lock body scroll aggressively - iOS Safari specific fixes
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
-      document.body.style.height = '100vh';
+      document.body.style.height = 'calc(100dvh - 50px)'; // Slightly smaller to prevent cropping
       document.body.style.top = '0';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
       document.body.classList.add('landscape-fullscreen');
+      
+      // Prevent iOS Safari bounce scroll
+      document.body.style.overscrollBehavior = 'none';
+      (document.body.style as any).WebkitOverflowScrolling = 'none';
+      
+      // Also lock html element (iOS Safari requirement)
+      const html = document.documentElement;
+      html.style.overflow = 'hidden';
+      html.style.position = 'fixed';
+      html.style.width = '100%';
+      html.style.height = 'calc(100dvh - 1px)';
       
       // Hide navbar with important flag
       const navbar = document.querySelector('.top-header') as HTMLElement;
@@ -77,15 +115,46 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
       const root = document.getElementById('root');
       if (root) {
         root.style.overflow = 'hidden';
+        root.style.position = 'fixed';
+        root.style.width = '100%';
+        root.style.height = 'calc(100dvh - 1px)'; // Slightly smaller to prevent cropping
+        root.style.top = '0';
       }
       
       return () => {
+        // Exit fullscreen mode
+        if (document.fullscreenElement) {
+          try {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if ((document as any).webkitExitFullscreen) {
+              (document as any).webkitExitFullscreen();
+            } else if ((document as any).mozCancelFullScreen) {
+              (document as any).mozCancelFullScreen();
+            } else if ((document as any).msExitFullscreen) {
+              (document as any).msExitFullscreen();
+            }
+          } catch (error) {
+            console.log('Exit fullscreen failed:', error);
+          }
+        }
+        
         document.body.style.overflow = '';
         document.body.style.position = '';
         document.body.style.width = '';
         document.body.style.height = '';
         document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.overscrollBehavior = '';
+        (document.body.style as any).WebkitOverflowScrolling = '';
         document.body.classList.remove('landscape-fullscreen');
+        
+        // Restore html element
+        html.style.overflow = '';
+        html.style.position = '';
+        html.style.width = '';
+        html.style.height = '';
         
         // Show navbar again
         if (navbar) {
@@ -96,6 +165,10 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
         // Restore root scroll
         if (root) {
           root.style.overflow = '';
+          root.style.position = '';
+          root.style.width = '';
+          root.style.height = '';
+          root.style.top = '';
         }
       };
     }
