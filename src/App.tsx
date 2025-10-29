@@ -179,8 +179,6 @@ const App = () => {
           {/* Enhanced UI Components */}
           <FloatingContactButton 
             position="bottom-left"
-            showDelay={3000}
-            hideOnScroll={false}
             onClick={() => {
               console.log('Contact button clicked - no action for now');
               // TODO: Add contact form or modal

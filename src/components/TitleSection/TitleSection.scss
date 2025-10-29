@@ -130,7 +130,7 @@
 
 #section-1 {
   height: calc(125dvh);  
-  top: 0dvh;
+  top: 0dvh; // Minimally reduced to close gap slightly while keeping video fully visible
   mask-image: linear-gradient(to bottom, black 75%, transparent);
 
   .title-section-container {
@@ -139,6 +139,12 @@
 
   .trigger {
     top: 0;
+  }
+  
+  // Mobile specific - reduce gap further while ensuring video stays visible
+  @media screen and (max-width: 767px) {
+    top: -20dvh; // Increased overlap to reduce white space, but video still visible due to z-index
+    
   }
 }
 
