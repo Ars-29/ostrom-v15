@@ -92,7 +92,18 @@ export const TouchOptimizedButton: React.FC<TouchOptimizedButtonProps> = ({
   }, [isTouchDevice, disabled, localTouchState.isTouching, localTouchState.touchStartPosition]);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    if (!isTouchDevice || disabled || !localTouchState.isTouching) return;
+    if (!isTouchDevice || disabled || !localTouchState.isTouching) {
+      // Reset state even if conditions aren't met
+      setLocalTouchState({
+        isTouching: false,
+        touchStartTime: 0,
+        touchStartPosition: { x: 0, y: 0 },
+        touchCurrentPosition: { x: 0, y: 0 },
+        gestureType: 'none',
+        isScrolling: false
+      });
+      return;
+    }
     
     const now = performance.now();
     const duration = now - localTouchState.touchStartTime;
@@ -101,11 +112,22 @@ export const TouchOptimizedButton: React.FC<TouchOptimizedButtonProps> = ({
     const touch = e.changedTouches[0];
     const withinDeadzone = isWithinDeadzone(touch.clientX, touch.clientY);
     
-    // Only trigger click if it's a tap, not a scroll, and within deadzone
-    if (localTouchState.gestureType === 'tap' && 
-        duration < 300 && 
-        !localTouchState.isScrolling && 
-        withinDeadzone) {
+    // More lenient tap detection - trigger if it seems like a tap
+    const isTap = (localTouchState.gestureType === 'tap' || localTouchState.gestureType === 'none') && 
+                  !localTouchState.isScrolling &&
+                  duration < 500; // Increased duration threshold
+    
+    // Trigger click if it's a tap and within deadzone, or just a simple tap
+    if (isTap && withinDeadzone) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (onClick) {
+        onClick();
+      }
+    } else if (isTap && !localTouchState.isScrolling && duration < 500) {
+      // Fallback: if it seems like a tap but outside deadzone, still trigger
+      e.preventDefault();
+      e.stopPropagation();
       if (onClick) {
         onClick();
       }
@@ -172,10 +194,11 @@ export const TouchOptimizedButton: React.FC<TouchOptimizedButtonProps> = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onClick={(e) => {
-          // Prevent click if we're on a touch device and handled via touch events
-          if (isTouchDevice) {
-            e.preventDefault();
+        onClick={() => {
+          // For non-touch devices, always allow clicks
+          // For touch devices, only prevent if we already handled it via touch
+          if (!isTouchDevice && onClick && !disabled) {
+            onClick();
           }
         }}
       >

@@ -150,6 +150,50 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, [muted]);
 
+  // Unlock audio on iOS/mobile after first user interaction
+  React.useEffect(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (!isIOS && !isMobile) return; // Only needed for mobile/iOS
+
+    let audioUnlocked = false;
+    const unlockAudio = () => {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+
+      // Create and play a silent audio to unlock audio context
+      const silentAudio = new Audio();
+      silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+      silentAudio.volume = 0.01;
+      silentAudio.play().catch(() => {
+        // Ignore errors
+      });
+
+      // Unmute all registered videos after user interaction
+      setTimeout(() => {
+        registeredVideos.current.forEach(video => {
+          if (!muted) {
+            video.muted = false;
+          }
+        });
+        console.log('Audio unlocked on user interaction');
+      }, 100);
+    };
+
+    // Listen for first user interaction
+    const events = ['touchstart', 'touchend', 'mousedown', 'click', 'keydown'];
+    events.forEach(eventType => {
+      document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
+    });
+
+    return () => {
+      events.forEach(eventType => {
+        document.removeEventListener(eventType, unlockAudio);
+      });
+    };
+  }, [muted]);
+
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     setAmbient,

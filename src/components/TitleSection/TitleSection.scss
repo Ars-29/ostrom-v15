@@ -76,6 +76,31 @@
     text-align: center; /* Center the text within the container */
   }
 
+  .instruction-hint {
+    font-family: var(--body-font);
+    color: #000;
+    font-size: 1.2rem;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 4vh;
+    padding: 0 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    transition-delay: 0.3s;
+
+    @media screen and (min-width: 768px) {
+      font-size: 1.5rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin-bottom: 5vh;
+    }
+
+    @media screen and (min-width: 1024px) {
+      font-size: 1.6rem;
+    }
+  }
+
   svg {
     overflow: visible; /* Ensure the SVG does not crop its content */
     height: auto; /* Adjust height dynamically based on content */
@@ -130,7 +155,7 @@
 
 #section-1 {
   height: calc(125dvh);  
-  top: 0dvh; // Minimally reduced to close gap slightly while keeping video fully visible
+  top: 0dvh;
   mask-image: linear-gradient(to bottom, black 75%, transparent);
 
   .title-section-container {
@@ -143,7 +168,7 @@
   
   // Mobile specific - reduce gap further while ensuring video stays visible
   @media screen and (max-width: 767px) {
-    top: -20dvh; // Increased overlap to reduce white space, but video still visible due to z-index
+    top: -20dvh;
     
   }
 }
@@ -169,6 +194,9 @@
     opacity: 1;
   }
 
+  .instruction-hint {
+    opacity: 0.85;
+  }
   
   .title-section-content {
     opacity: 1;

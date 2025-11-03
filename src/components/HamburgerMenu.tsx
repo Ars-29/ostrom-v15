@@ -86,11 +86,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     WebkitBackdropFilter: 'blur(20px)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-    zIndex: 1000,
+    zIndex: 1002, // High z-index to ensure visibility on mobile
     transform: isOpen 
       ? 'translateX(0)' 
       : `translateX(${position === 'left' ? '-100%' : '100%'})`,
     transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    visibility: isOpen ? 'visible' : 'hidden', // Ensure proper visibility on mobile
     display: 'flex',
     flexDirection: 'column',
     ...style
@@ -106,10 +107,11 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backdropFilter: 'blur(4px)',
     WebkitBackdropFilter: 'blur(4px)',
-    zIndex: 999,
+    zIndex: 1001, // Above menu but below button
     opacity: isOpen ? 1 : 0,
     visibility: isOpen ? 'visible' : 'hidden',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    pointerEvents: isOpen ? 'auto' : 'none' // Prevent blocking when closed
   });
   
   // Get hamburger button styles - Modern design
@@ -123,8 +125,8 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     backgroundColor: 'transparent',
     border: 'none',
     boxShadow: 'none',
-    zIndex: 1002, // Higher than TitleSection (1001) to ensure visibility
-    display: 'flex',
+    zIndex: 1003, // Higher than menu (1002) and TitleSection (1001) to ensure visibility
+    display: isOpen ? 'none' : 'flex', // Hide button when menu is open to prevent overlap
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
@@ -142,11 +144,8 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       backgroundColor: '#000000',
       borderRadius: '1px', // Rounded ends
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-      transform: isOpen 
-        ? (lineNumber === 1 ? 'rotate(45deg) translate(6px, 6px)' :
-           lineNumber === 2 ? 'opacity(0) scale(0)' :
-           'rotate(-45deg) translate(6px, -6px)')
-        : 'none'
+      // Don't transform when menu is open since button will be hidden
+      transform: 'none'
     };
 
     // Progressive width design - each line shorter than the previous, all left-aligned
@@ -295,17 +294,127 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               )}
             </div>
           ))}
+          
+          {/* Social Links Section */}
+          <div style={{
+            padding: '20px',
+            borderTop: '1px solid rgba(0, 0, 0, 0.1)',
+            marginTop: 'auto'
+          }}>
+            <h4 style={{
+              margin: '0 0 16px 0',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#666666',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              Follow Us
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <a
+                href="https://www.instagram.com/ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ marginRight: '12px', fontSize: '18px' }}>📷</span>
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Instagram</span>
+              </a>
+              <a
+                href="https://www.facebook.com/ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ marginRight: '12px', fontSize: '18px' }}>👥</span>
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Facebook</span>
+              </a>
+              <a
+                href="https://twitter.com/ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ marginRight: '12px', fontSize: '18px' }}>🐦</span>
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Twitter</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/company/ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ marginRight: '12px', fontSize: '18px' }}>💼</span>
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+          
+          {/* Email Section */}
+          <div style={{
+            padding: '20px',
+            borderTop: '1px solid rgba(0, 0, 0, 0.1)'
+          }}>
+            <h4 style={{
+              margin: '0 0 16px 0',
+              fontSize: '14px',
+              fontWeight: '600',
+              color: '#666666',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              Contact
+            </h4>
+            <a
+              href="mailto:contact@ostrometfils.com"
+              className="menu-item"
+              style={{
+                ...getItemStyles(),
+                padding: '10px 20px',
+                textDecoration: 'none'
+              }}
+              onClick={() => onClose()}
+            >
+              <span style={{ marginRight: '12px', fontSize: '18px' }}>✉️</span>
+              <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>contact@ostrometfils.com</span>
+            </a>
+          </div>
         </div>
         
         {/* Footer */}
         <div style={{
           padding: '20px',
           borderTop: '1px solid rgba(0, 0, 0, 0.1)',
-          fontSize: '14px',
-          color: '#666666',
+          fontSize: '12px',
+          color: '#999999',
           textAlign: 'center'
         }}>
-          © {new Date().getFullYear()} STROM
+          © {new Date().getFullYear()} Ostrom et Fils
         </div>
       </div>
       
@@ -356,7 +465,14 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
         /* Mobile optimizations */
         @media (max-width: 768px) {
           .hamburger-menu {
-            width: 100vw !important;
+            width: 85vw !important;
+            max-width: 320px !important;
+            z-index: 1002 !important;
+            visibility: visible !important;
+          }
+          
+          .menu-overlay {
+            z-index: 1001 !important;
           }
           
           .hamburger-button {
@@ -365,6 +481,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
             width: 36px !important;
             height: 36px !important;
             gap: 4px !important; /* Slightly smaller gap on mobile */
+          }
+          
+          /* Ensure button is hidden when menu is open on mobile */
+          .hamburger-menu[style*="transform: translateX(0)"] ~ .hamburger-button,
+          .hamburger-menu:not([style*="transform: translateX(-100%)"]) ~ .hamburger-button {
+            display: none !important;
           }
           
           .hamburger-button > div {

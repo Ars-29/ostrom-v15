@@ -116,27 +116,27 @@ export const FloatingContactButton: React.FC<FloatingContactButtonProps> = ({
     setIsHovered(false);
   };
   
-  // Prevent accidental triggers during scroll
+  // Prevent accidental triggers during scroll - but don't block button clicks
   const handleTouchStart = (e: React.TouchEvent) => {
-    // Only handle touches directly on the button, not on the container
-    if (e.target !== e.currentTarget) {
+    // Don't interfere with button clicks - let TouchOptimizedButton handle it
+    // Only prevent if it's on the container but not the button
+    if (e.target === e.currentTarget) {
       e.stopPropagation();
-      return;
     }
-    e.stopPropagation();
   };
   
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.stopPropagation();
+    // Don't block button interactions
+    if (e.target === e.currentTarget) {
+      e.stopPropagation();
+    }
   };
   
   const handleTouchEnd = (e: React.TouchEvent) => {
-    // Only handle touches directly on the button
-    if (e.target !== e.currentTarget) {
+    // Don't block button interactions
+    if (e.target === e.currentTarget) {
       e.stopPropagation();
-      return;
     }
-    e.stopPropagation();
   };
   
   const handleClick = () => {
@@ -163,7 +163,8 @@ export const FloatingContactButton: React.FC<FloatingContactButtonProps> = ({
         className="contact-tooltip"
         style={getTooltipStyles()}
       >
-        Contact Us
+        {/* Temporary comment - no functionality yet */}
+        Contact coming soon
       </div>
       
       {/* Button */}

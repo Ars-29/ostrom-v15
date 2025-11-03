@@ -200,6 +200,38 @@
 
 .connoisseurs__footer-text { color: #2A2520; }
 
+.connoisseurs__cta-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-family: var(--body-font);
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #E8E3DA;
+  background-color: #574343;
+  border: 2px solid #574343;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2A2520;
+    border-color: #2A2520;
+    color: #E8E3DA;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 37, 32, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 767px) {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}
+
 .top-header .loader-logo,
 .top-header .logo,
 .top-header .logo-image {

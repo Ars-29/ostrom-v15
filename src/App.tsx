@@ -19,6 +19,7 @@ import { useIsMobile } from './hooks/useIsMobile';
 import ServiceWorkerDebug from './components/ServiceWorkerDebug';
 import FloatingContactButton from './components/FloatingContactButton';
 import HamburgerMenu from './components/HamburgerMenu';
+import { useLocation } from 'react-router-dom';
 
 import './App.scss';
 
@@ -31,8 +32,24 @@ const App = () => {
   const { setSoundEnabled } = useSound();
   const { currentScene } = useScene();
   const { setAmbient } = useSound();
+  const location = useLocation();
+
+  // Stop all audio when navigating away from this route
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      console.log('Navigated away from main route - stopping audio');
+      setAmbient(null);
+      setSoundEnabled(false);
+    }
+  }, [location.pathname, setAmbient, setSoundEnabled]);
 
   useEffect(() => {
+    // Only play audio if we're on the main route
+    if (location.pathname !== '/') {
+      setAmbient(null);
+      return;
+    }
+
     console.log('Scene changed:', currentScene, 'hasStarted:', hasStarted);
     // Only start ambient sounds after the intro (when hasStarted is true AND we're not on intro)
     if (hasStarted && currentScene !== 'intro') {
@@ -49,11 +66,12 @@ const App = () => {
       // Ensure no ambient sound during intro or before start
       setAmbient(null);
     }
-  }, [currentScene, setAmbient, hasStarted, setSoundEnabled]);
+  }, [currentScene, setAmbient, hasStarted, setSoundEnabled, location.pathname]);
 
   const handleLoaderComplete = () => {
     setHasStarted(true);
-    // Don't enable sound system here - let it be enabled when we actually need ambient sounds
+    // Enable sound system immediately after intro starts so all sounds work
+    setSoundEnabled(true);
   };
 
   // Navigation menu items
@@ -129,7 +147,7 @@ const App = () => {
             <>
               <Intro hasStarted={hasStarted} />
               <Timeline />
-              <TitleSection id="section-1" title='' subtitle='The Urban Pioneer' />
+              <TitleSection id="section-1" title='' subtitle='The Urban Pioneer' showInstructions={true} />
               <ScrollingText targetSection=".persona-space.persona-1">
                 <div>
                   <p>&nbsp;</p>
@@ -180,8 +198,7 @@ const App = () => {
           <FloatingContactButton 
             position="bottom-left"
             onClick={() => {
-              console.log('Contact button clicked - no action for now');
-              // TODO: Add contact form or modal
+              alert('Thank you for your interest! Contact functionality will be available soon. Please reach us at contact@ostrometfils.com');
             }}
           />
           
@@ -190,7 +207,7 @@ const App = () => {
             isOpen={isMenuOpen}
             onToggle={() => setIsMenuOpen(!isMenuOpen)}
             onClose={() => setIsMenuOpen(false)}
-            position="right"
+            position="left"
           />
         </ReactLenis>
       </OverlayImageProvider>

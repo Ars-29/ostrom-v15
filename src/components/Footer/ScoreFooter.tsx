@@ -49,17 +49,17 @@ const ScoreFooter: React.FC = () => {
           );
         })}
       </div>
-      {(totalFound === totalLabels) ? (
+      {(totalFound !== totalLabels) ? (
         <div className='footer-text'>
           <h2 className='text'>
-            Congratulations, you’ve unlocked all the secrets !
+            Congratulations, you've unlocked all the secrets !
           </h2>
           <div className='description'>
             Welcome to the inner circle.
             <br />Our private Discord is reserved for those who see beyond the surface - a space for curated conversations, early access, and privileged insights.
           </div>
             <div className='footer-text'>
-                <button className='btn' onClick={() => navigate('/connoisseurs')}>Accès chambre secrète</button>
+                <button className='btn' onClick={() => navigate('/the-hidden-chamber')}>Enter the Chamber</button>
             </div>
         </div>
       ) : (

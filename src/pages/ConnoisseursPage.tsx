@@ -2,8 +2,9 @@ import { useEffect, useState, useRef } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { ScoreDisplay } from '../components/ScoreDisplay/ScoreDisplay';
 import HamburgerMenu from '../components/HamburgerMenu';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LabelInfoProvider } from '../contexts/LabelInfoContext';
+import { useSound } from '../contexts/SoundContext';
 import Logo from '../components/Logo/Logo';
 import './ConnoisseursPage.scss';
 
@@ -18,8 +19,27 @@ const dividerSrc = `${import.meta.env.BASE_URL}images/divider.png`;
 
 export default function ConnoisseursPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const heroRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { setSoundEnabled, setAmbient } = useSound();
+
+  // Stop all audio from main route when this page mounts
+  useEffect(() => {
+    console.log('ConnoisseursPage mounted - stopping main route audio');
+    setAmbient(null);
+    setSoundEnabled(true);
+  }, [setAmbient, setSoundEnabled]);
+
+  // Stop audio when navigating away from this route
+  useEffect(() => {
+    if (location.pathname !== '/the-hidden-chamber') {
+      console.log('Navigated away from ConnoisseursPage - stopping audio');
+      setAmbient(null);
+      setSoundEnabled(false);
+    }
+  }, [location.pathname, setAmbient, setSoundEnabled]);
 
   // Ensure root element is visible and start at hero section on mount
   useEffect(() => {
@@ -31,6 +51,52 @@ export default function ConnoisseursPage() {
     setTimeout(() => {
       heroRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
     }, 0);
+  }, []);
+
+  // Unmute video after it starts playing (especially for iOS/mobile)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    const handlePlay = () => {
+      // Unmute after video plays (allows iOS audio unlock)
+      setTimeout(() => {
+        if (video && (isMobile || isIOS)) {
+          video.muted = false;
+          console.log('Unmuting ConnoisseursPage video after play');
+        }
+      }, 500);
+    };
+
+    // Also unmute on any user interaction (for better iOS compatibility)
+    const unlockAudio = () => {
+      if (video && (isMobile || isIOS)) {
+        setTimeout(() => {
+          if (video) {
+            video.muted = false;
+            console.log('Unmuting ConnoisseursPage video on user interaction');
+          }
+        }, 100);
+      }
+    };
+
+    video.addEventListener('play', handlePlay);
+    
+    // Listen for user interactions to unlock audio
+    const events = ['touchstart', 'click'];
+    events.forEach(eventType => {
+      document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
+    });
+
+    return () => {
+      video.removeEventListener('play', handlePlay);
+      events.forEach(eventType => {
+        document.removeEventListener(eventType, unlockAudio);
+      });
+    };
   }, []);
 
   const menuItems = [
@@ -50,12 +116,13 @@ export default function ConnoisseursPage() {
           isOpen={isMenuOpen}
           onToggle={() => setIsMenuOpen(!isMenuOpen)}
           onClose={() => setIsMenuOpen(false)}
-          position="right"
+          position="left"
         />
 
         {/* Hero Video Section */}
         <section ref={heroRef} className="connoisseurs__hero">
           <video 
+            ref={videoRef}
             className="connoisseurs__video"
             autoPlay 
             muted 
@@ -71,11 +138,11 @@ export default function ConnoisseursPage() {
         {/* Header */}
         <header className="connoisseurs__header">
           <h1 className="connoisseurs__title">
-            Connoisseurs of Speed
+            The Hidden Chamber
           </h1>
           <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
           <p className="connoisseurs__lead">
-            Ström's history holds hidden treasures. Will you uncover them all?
+            A glimpse into the rebirth of a forgotten Parisian House. Archival fragments, hands at work, and echoes of the past invite you into the Hidden Chamber.
           </p>
         </header>
 
@@ -83,11 +150,8 @@ export default function ConnoisseursPage() {
         <main className="connoisseurs__main">
           {/* Introduction Section */}
           <section className="connoisseurs__intro">
-            <p className="connoisseurs__text" style={{ marginBottom: '1.5rem' }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-        		<p className="connoisseurs__text">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            <p className="connoisseurs__text">
+              Touch is our archive. Know-how revived.
             </p>
           </section>
 
@@ -142,18 +206,21 @@ export default function ConnoisseursPage() {
           {/* Closing Section */}
           <section className="connoisseurs__closing">
             <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
-            <p className="connoisseurs__text" style={{ marginBottom: '1.5rem' }}>
-              Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.
-            </p>
-            <p className="connoisseurs__text">
-              Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
-            </p>
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <a 
+                href="https://wa.me/your-whatsapp-number" 
+                rel="noopener noreferrer"
+                className="connoisseurs__cta-button"
+              >
+                Access Confidential Dispatches
+              </a>
+            </div>
           </section>
         </main>
 
         {/* Footer */}
         <footer className="connoisseurs__footer">
-          <p className="connoisseurs__footer-text">© 2025 Connoisseurs of Speed. All rights reserved.</p>
+          <p className="connoisseurs__footer-text">© 2025 The Hidden Chamber. All rights reserved.</p>
         </footer>
       </div>
     </LabelInfoProvider>
