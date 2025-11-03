@@ -272,11 +272,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               }}
               onClick={() => handleItemClick(item)}
             >
-              {item.icon && (
-                <span style={{ marginRight: '12px', fontSize: '18px' }}>
-                  {item.icon}
-                </span>
-              )}
               <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>
                 {item.label}
               </span>
@@ -324,7 +319,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 }}
                 onClick={() => onClose()}
               >
-                <span style={{ marginRight: '12px', fontSize: '18px' }}>📷</span>
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Instagram</span>
               </a>
               <a
@@ -339,7 +333,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 }}
                 onClick={() => onClose()}
               >
-                <span style={{ marginRight: '12px', fontSize: '18px' }}>👥</span>
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Facebook</span>
               </a>
               <a
@@ -354,7 +347,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 }}
                 onClick={() => onClose()}
               >
-                <span style={{ marginRight: '12px', fontSize: '18px' }}>🐦</span>
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Twitter</span>
               </a>
               <a
@@ -369,7 +361,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 }}
                 onClick={() => onClose()}
               >
-                <span style={{ marginRight: '12px', fontSize: '18px' }}>💼</span>
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>LinkedIn</span>
               </a>
             </div>
@@ -400,8 +391,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               }}
               onClick={() => onClose()}
             >
-              <span style={{ marginRight: '12px', fontSize: '18px' }}>✉️</span>
-              <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>contact@ostrometfils.com</span>
+              <span style={{ flex: 1, fontSize: '14px', fontWeight: '500', color: '#667eea' }}>contact@ostrometfils.com</span>
             </a>
           </div>
         </div>

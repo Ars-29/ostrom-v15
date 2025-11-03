@@ -165,13 +165,14 @@ export default function ConnoisseursPage() {
               />
             </div>
             <div className="connoisseurs__section-body">
-              <h2 className="connoisseurs__h2">The Journey Begins</h2>
+              {/* Text content commented out - waiting for client to provide content */}
+              {/* <h2 className="connoisseurs__h2">The Journey Begins</h2>
               <p className="connoisseurs__text" style={{ marginBottom: '1rem' }}>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
               </p>
               <p className="connoisseurs__text">
                 Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.
-              </p>
+              </p> */}
             </div>
           </section>
 
@@ -184,10 +185,11 @@ export default function ConnoisseursPage() {
                   alt="Portrait view one"
                   className="connoisseurs__portrait"
                 />
-                <h3 className="connoisseurs__h3">Architectural Elegance</h3>
+                {/* Text content commented out - waiting for client to provide content */}
+                {/* <h3 className="connoisseurs__h3">Architectural Elegance</h3>
                 <p className="connoisseurs__text">
                   At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.
-                </p>
+                </p> */}
               </div>
               <div>
                 <ImageWithFallback 
@@ -195,10 +197,11 @@ export default function ConnoisseursPage() {
                   alt="Portrait view two"
                   className="connoisseurs__portrait"
                 />
-                <h3 className="connoisseurs__h3">Urban Stories</h3>
+                {/* Text content commented out - waiting for client to provide content */}
+                {/* <h3 className="connoisseurs__h3">Urban Stories</h3>
                 <p className="connoisseurs__text">
                   Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias.
-                </p>
+                </p> */}
               </div>
             </div>
           </section>

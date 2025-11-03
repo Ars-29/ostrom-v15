@@ -49,7 +49,7 @@
   font-size: clamp(2.5rem, 6vw, 6rem);
   font-weight: 400;
   line-height: 1;
-  color: #574343; /* close to TitleSection filled color */
+  color: #1A1A1A; /* match TitleSection filled color */
 }
 
 .connoisseurs__divider-img {
@@ -93,8 +93,10 @@
   max-width: 42rem; /* 2xl */
   margin: 0 auto;
   font-family: var(--body-font);
-  color: #2A2520;
+  font-size: clamp(1rem, 1.5vw, 1.25rem); /* match TitleSection font size */
+  color: #1A1A1A; /* match TitleSection text color */
   text-align: center;
+  line-height: 1.6;
 }
 
 .connoisseurs__main {
@@ -113,8 +115,10 @@
 }
 
 .connoisseurs__text {
-  color: #2A2520;
-  line-height: 1.65; /* leading-relaxed */
+  color: #1A1A1A; /* match TitleSection text color */
+  font-family: var(--body-font);
+  font-size: clamp(1rem, 1.5vw, 1.25rem); /* match TitleSection font size */
+  line-height: 1.6;
 }
 
 .connoisseurs__text + .connoisseurs__text {
@@ -202,33 +206,37 @@
 
 .connoisseurs__cta-button {
   display: inline-block;
-  padding: 1rem 2.5rem;
+  padding: 10px 20px;
   font-family: var(--body-font);
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #E8E3DA;
-  background-color: #574343;
-  border: 2px solid #574343;
-  border-radius: 0.5rem;
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFF;
+  background-color: #000;
+  border: 1px solid #000;
+  border-radius: 20px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 
   &:hover {
-    background-color: #2A2520;
-    border-color: #2A2520;
-    color: #E8E3DA;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(42, 37, 32, 0.3);
+    background-color: transparent;
+    color: #000;
+    border-color: #000;
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #000;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: scale(1.02);
   }
 
   @media (max-width: 767px) {
-    padding: 0.875rem 2rem;
-    font-size: 1rem;
+    padding: 10px 20px;
+    font-size: 16px;
   }
 }
 
