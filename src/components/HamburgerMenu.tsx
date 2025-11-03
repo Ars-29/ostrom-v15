@@ -81,7 +81,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
     [position]: 0,
     width: '280px',
     height: '100vh',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#E8E3DA', // Light beige background to match theme
     backdropFilter: 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -238,15 +238,16 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
             style={{
               width: '32px',
               height: '32px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              backgroundColor: 'transparent',
               border: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               fontSize: '18px',
-              color: '#666666'
+              color: '#666666',
+              padding: '0',
+              boxSizing: 'border-box'
             }}
             enableHapticFeedback={true}
             touchTargetSize={32}
@@ -391,7 +392,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               }}
               onClick={() => onClose()}
             >
-              <span style={{ flex: 1, fontSize: '14px', fontWeight: '500', color: '#667eea' }}>contact@ostrometfils.com</span>
+              <span style={{ flex: 1, fontSize: '14px', fontWeight: '500', color: '#000000' }}>contact@ostrometfils.com</span>
             </a>
           </div>
         </div>
@@ -411,8 +412,8 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
        {/* Enhanced styles */}
        <style>{`
         .menu-item:hover {
-          background-color: rgba(102, 126, 234, 0.1) !important;
-          border-left-color: #667eea !important;
+          background-color: rgba(0, 0, 0, 0.05) !important;
+          border-left-color: #000000 !important;
           transform: translateX(4px);
         }
         

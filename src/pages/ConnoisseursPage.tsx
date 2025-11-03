@@ -208,7 +208,7 @@ export default function ConnoisseursPage() {
 
           {/* Closing Section */}
           <section className="connoisseurs__closing">
-            <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
+            {/* Divider image removed - button should match main page contact button */}
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
               <a 
                 href="https://wa.me/your-whatsapp-number" 
