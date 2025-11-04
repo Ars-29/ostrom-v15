@@ -128,7 +128,7 @@ export const FloatingContactButton: React.FC<FloatingContactButtonProps> = ({
   const handleTouchMove = (e: React.TouchEvent) => {
     // Don't block button interactions
     if (e.target === e.currentTarget) {
-      e.stopPropagation();
+    e.stopPropagation();
     }
   };
   
@@ -140,11 +140,11 @@ export const FloatingContactButton: React.FC<FloatingContactButtonProps> = ({
   };
   
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      // No default action - just log for now
-      console.log('Contact button clicked - no default action');
+      if (onClick) {
+        onClick();
+      } else {
+        // No default action - just log for now
+        console.log('Contact button clicked - no default action');
     }
   };
   

@@ -143,7 +143,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       height: '1px',
       backgroundColor: '#000000',
       borderRadius: '1px', // Rounded ends
-      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       // Don't transform when menu is open since button will be hidden
       transform: 'none'
     };

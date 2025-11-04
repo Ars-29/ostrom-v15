@@ -63,10 +63,10 @@ canvas {
   left: 0;
   right: 0;
   height: 83px;
-  background: radial-gradient(circle at top, rgba(240, 235, 225, 0.3) 0%, rgba(245, 240, 230, 0.25) 50%, rgba(250, 245, 235, 0.2) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(232, 227, 218, 0.1); /* Minimal transparency - very subtle background */
+  backdrop-filter: blur(2px); /* Minimal blur effect */
+  -webkit-backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02); /* Very subtle border */
   z-index: 1000;
   pointer-events: none; /* Allow clicks to pass through */
   
