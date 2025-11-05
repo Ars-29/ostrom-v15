@@ -120,13 +120,6 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
         <div id={`${id}-trigger`}className='trigger'></div>
         <div id={`${id}-section-trigger`}className='section-trigger'></div>
         <div className={`title-section-container ${isVisible ? 'animate' : ''}`}>
-          {showInstructions && (
-            <div className='instruction-hint'>
-              Navigate through time and discover hidden secrets.
-              <br />
-              Click the glowing markers to reveal Ström's treasures.
-            </div>
-          )}
           <svg
             ref={svgRef}
             width={svgWidth}
@@ -137,10 +130,18 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
             </text>
           </svg>
           <img src={dividerSrc} alt="Divider" className="loader-divider" />
-          <div className='title-section-content'>
-            Ström's history holds hidden treasures.
-            <br />Will you uncover them all ? 
-          </div>
+          {showInstructions ? (
+            <div className='title-section-content'>
+              Uncover Ström's treasures through time,
+              <br />
+              collect them all to unlock the Hidden Chamber.
+            </div>
+          ) : (
+            <div className='title-section-content'>
+              Ström's history holds hidden treasures.
+              <br />Will you uncover them all ? 
+            </div>
+          )}
         </div>
       </div>
     </div>

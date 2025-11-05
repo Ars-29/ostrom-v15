@@ -337,20 +337,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Facebook</span>
               </a>
               <a
-                href="https://twitter.com/ostrometfils"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="menu-item"
-                style={{
-                  ...getItemStyles(),
-                  padding: '10px 20px',
-                  textDecoration: 'none'
-                }}
-                onClick={() => onClose()}
-              >
-                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Twitter</span>
-              </a>
-              <a
                 href="https://www.linkedin.com/company/ostrometfils"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -363,6 +349,34 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 onClick={() => onClose()}
               >
                 <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>LinkedIn</span>
+              </a>
+              <a
+                href="https://www.youtube.com/@ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>YouTube</span>
+              </a>
+              <a
+                href="https://www.threads.net/@ostrometfils"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="menu-item"
+                style={{
+                  ...getItemStyles(),
+                  padding: '10px 20px',
+                  textDecoration: 'none'
+                }}
+                onClick={() => onClose()}
+              >
+                <span style={{ flex: 1, fontSize: '16px', fontWeight: '500' }}>Threads</span>
               </a>
             </div>
           </div>
@@ -411,6 +425,37 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       
        {/* Enhanced styles */}
        <style>{`
+        /* Scrollbar styling to match sidebar background */
+        .hamburger-menu::-webkit-scrollbar,
+        .hamburger-menu *::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .hamburger-menu::-webkit-scrollbar-track,
+        .hamburger-menu *::-webkit-scrollbar-track {
+          background: #E8E3DA !important; /* Match sidebar background color */
+          border-radius: 4px;
+        }
+        
+        .hamburger-menu::-webkit-scrollbar-thumb,
+        .hamburger-menu *::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.3) !important;
+          border-radius: 4px;
+        }
+        
+        .hamburger-menu::-webkit-scrollbar-thumb:hover,
+        .hamburger-menu *::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        /* Firefox scrollbar styling */
+        .hamburger-menu,
+        .hamburger-menu * {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.3) #E8E3DA;
+        }
+        
         .menu-item:hover {
           background-color: rgba(0, 0, 0, 0.05) !important;
           border-left-color: #000000 !important;

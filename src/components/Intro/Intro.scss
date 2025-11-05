@@ -7,11 +7,12 @@
   
   
     @media screen and (min-width: 1025px) {
-      margin-top: 84px; // Remove margin, use padding on video instead
+      //margin-top: 84px; // Remove margin, use padding on video instead
       height: auto;
       width: 100%;
       min-height: calc(100vh + 90px); // Extend to accommodate navbar height
-      padding-top: 90px; // Push video content down
+      padding-top: 90px;
+      z-index: 1002; // Push video content down
     }
   
   &.intro--fullscreen {
@@ -49,7 +50,7 @@
       // Normal layout, navbar visible, scrollable
       position: relative;
       width: 100%;
-      margin-top: 61px; // Account for header height
+      //margin-top: 61px; // Account for header height
       height: auto;
       min-height: auto;
       display: block;

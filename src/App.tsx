@@ -19,7 +19,7 @@ import { useIsMobile } from './hooks/useIsMobile';
 import ServiceWorkerDebug from './components/ServiceWorkerDebug';
 import FloatingContactButton from './components/FloatingContactButton';
 import HamburgerMenu from './components/HamburgerMenu';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import './App.scss';
 
@@ -27,6 +27,7 @@ const debugMode = false;
 
 const App = () => {
   const isMobile = useIsMobile(768);
+  const navigate = useNavigate();
   const [hasStarted, setHasStarted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { setSoundEnabled } = useSound();
@@ -79,15 +80,13 @@ const App = () => {
     {
       id: 'home',
       label: 'Home',
-      icon: '🏠',
       onClick: () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
     {
       id: 'urban-pioneer',
-      label: 'The Urban Pioneer',
-      icon: '🏙️',
+      label: 'The Urban Pionnier',
       onClick: () => {
         const element = document.getElementById('section-1');
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -96,7 +95,6 @@ const App = () => {
     {
       id: 'connoisseurs',
       label: 'Connoisseurs of Speed',
-      icon: '🏎️',
       onClick: () => {
         const element = document.getElementById('section-2');
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -105,28 +103,17 @@ const App = () => {
     {
       id: 'above-beyond',
       label: 'Above and Beyond',
-      icon: '✈️',
       onClick: () => {
         const element = document.getElementById('section-3');
         element?.scrollIntoView({ behavior: 'smooth' });
       }
     },
     {
-      id: 'contact',
-      label: 'Contact',
-      icon: '📧',
+      id: 'hidden-chamber',
+      label: 'The Hidden Chamber',
       onClick: () => {
-        console.log('Contact clicked - no action for now');
-        // TODO: Add contact form or modal
-      }
-    },
-    {
-      id: 'discord',
-      label: 'Discord',
-      icon: '💬',
-      onClick: () => {
-        console.log('Discord clicked - no action for now');
-        // TODO: Add Discord integration
+        // Navigate to hidden chamber - password modal will handle authentication
+        navigate('/the-hidden-chamber');
       }
     }
   ];

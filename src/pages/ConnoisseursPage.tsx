@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { ScoreDisplay } from '../components/ScoreDisplay/ScoreDisplay';
 import HamburgerMenu from '../components/HamburgerMenu';
+import { PasswordModal } from '../components/PasswordModal';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LabelInfoProvider } from '../contexts/LabelInfoContext';
 import { useSound } from '../contexts/SoundContext';
@@ -21,9 +22,19 @@ export default function ConnoisseursPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const heroRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { setSoundEnabled, setAmbient } = useSound();
+
+  // Check if password is already verified in session
+  useEffect(() => {
+    const isVerified = sessionStorage.getItem('passwordVerified') === 'true';
+    if (!isVerified) {
+      // Show password modal if not verified
+      setIsPasswordModalOpen(true);
+    }
+  }, []);
 
   // Stop all audio from main route when this page mounts
   useEffect(() => {
@@ -101,6 +112,48 @@ export default function ConnoisseursPage() {
 
   const menuItems = [
     { id: 'home', label: 'Home', onClick: () => navigate('/') },
+    {
+      id: 'urban-pioneer',
+      label: 'The Urban Pionnier',
+      onClick: () => {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.getElementById('section-1');
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    },
+    {
+      id: 'connoisseurs',
+      label: 'Connoisseurs of Speed',
+      onClick: () => {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.getElementById('section-2');
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    },
+    {
+      id: 'above-beyond',
+      label: 'Above and Beyond',
+      onClick: () => {
+        navigate('/');
+        setTimeout(() => {
+          const element = document.getElementById('section-3');
+          element?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    },
+    {
+      id: 'hidden-chamber',
+      label: 'The Hidden Chamber',
+      onClick: () => {
+        // Already on this page, just close menu
+        setIsMenuOpen(false);
+        // Note: Password prompt is not needed here since user is already on the page
+      }
+    }
   ];
   
   return (
@@ -142,7 +195,13 @@ export default function ConnoisseursPage() {
           </h1>
           <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
           <p className="connoisseurs__lead">
-            A glimpse into the rebirth of a forgotten Parisian House. Archival fragments, hands at work, and echoes of the past invite you into the Hidden Chamber.
+            A glimpse into the rebirth of a forgotten Parisian house.
+            <br />
+            Archival fragments, hands at work, and echoes of the past guide you into the Hidden Chamber —
+            <br />
+            a private, exclusive space unlocked by your unique password,
+            <br />
+            where creations and stories are revealed in avant-première.
           </p>
         </header>
 
@@ -151,7 +210,9 @@ export default function ConnoisseursPage() {
           {/* Introduction Section */}
           <section className="connoisseurs__intro">
             <p className="connoisseurs__text">
-              Touch is our archive. Know-how revived.
+              Touch is our archive.
+              <br />
+              Know-how, revived.
             </p>
           </section>
 
@@ -210,12 +271,15 @@ export default function ConnoisseursPage() {
           <section className="connoisseurs__closing">
             {/* Divider image removed - button should match main page contact button */}
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <p className="connoisseurs__text" style={{ marginBottom: '1.5rem', fontStyle: 'italic' }}>
+                Where private invitations and whispered news await.
+              </p>
               <a 
                 href="https://wa.me/your-whatsapp-number" 
                 rel="noopener noreferrer"
                 className="connoisseurs__cta-button"
               >
-                Access Confidential Dispatches
+                Join the Inner Circle
               </a>
             </div>
           </section>
@@ -226,6 +290,19 @@ export default function ConnoisseursPage() {
           <p className="connoisseurs__footer-text">© 2025 The Hidden Chamber. All rights reserved.</p>
         </footer>
       </div>
+
+      <PasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => {
+          setIsPasswordModalOpen(false);
+          // Navigate back if password is cancelled
+          navigate('/');
+        }}
+        onSuccess={() => {
+          setIsPasswordModalOpen(false);
+          // Password verified, user can now view the page
+        }}
+      />
     </LabelInfoProvider>
   );
 }

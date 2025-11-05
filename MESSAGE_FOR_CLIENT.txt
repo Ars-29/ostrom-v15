@@ -1,0 +1,28 @@
+Hi team,
+
+The frontend is ready for backend integration. We need 2 API endpoints to be implemented:
+
+1. POST /api/auth/verify-password
+   Request Body: { "password": "string" }
+   Response: { "success": true/false, "message": "string", "token": "optional" }
+
+2. POST /api/auth/request-password
+   Request Body: { 
+     "email": "user@example.com",
+     "secretsFound": { "street": 5, "road": 6, "plane": 4 },
+     "totalFound": 15,
+     "totalLabels": 15
+   }
+   Response: { "success": true/false, "message": "string" }
+
+Complete API specification with all details, request/response formats, error handling, and example API calls is in CLIENT_API_SPECIFICATION.md file.
+
+The frontend code is already implemented in src/utils/api.ts and ready to connect once your endpoints are live.
+
+Please let us know:
+1. The backend API base URL (we'll set it in environment variable VITE_API_BASE_URL)
+2. When endpoints are ready for testing
+
+Thanks!
+
+
