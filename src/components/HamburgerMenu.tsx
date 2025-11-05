@@ -173,7 +173,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   
   // Get menu header styles
   const getHeaderStyles = (): React.CSSProperties => ({
-    padding: '20px',
+    padding: '12px 16px',
     borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
     display: 'flex',
     alignItems: 'center',
@@ -183,7 +183,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   // Get menu items styles
   const getItemsStyles = (): React.CSSProperties => ({
     flex: 1,
-    padding: '20px 0',
+    padding: '8px 0',
     overflowY: 'auto'
   });
   
@@ -191,7 +191,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   const getItemStyles = (): React.CSSProperties => ({
     display: 'flex',
     alignItems: 'center',
-    padding: '12px 20px',
+    padding: '8px 16px',
     color: '#333333',
     textDecoration: 'none',
     transition: 'all 0.2s ease',
@@ -293,12 +293,12 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           
           {/* Social Links Section */}
           <div style={{
-            padding: '20px',
+            padding: '12px 16px',
             borderTop: '1px solid rgba(0, 0, 0, 0.1)',
             marginTop: 'auto'
           }}>
             <h4 style={{
-              margin: '0 0 16px 0',
+              margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
               color: '#666666',
@@ -307,7 +307,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
             }}>
               Follow Us
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <a
                 href="https://www.instagram.com/ostrometfils"
                 target="_blank"
@@ -315,7 +315,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 className="menu-item"
                 style={{
                   ...getItemStyles(),
-                  padding: '10px 20px',
+                  padding: '6px 16px',
                   textDecoration: 'none'
                 }}
                 onClick={() => onClose()}
@@ -329,7 +329,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 className="menu-item"
                 style={{
                   ...getItemStyles(),
-                  padding: '10px 20px',
+                  padding: '6px 16px',
                   textDecoration: 'none'
                 }}
                 onClick={() => onClose()}
@@ -343,7 +343,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 className="menu-item"
                 style={{
                   ...getItemStyles(),
-                  padding: '10px 20px',
+                  padding: '6px 16px',
                   textDecoration: 'none'
                 }}
                 onClick={() => onClose()}
@@ -357,7 +357,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 className="menu-item"
                 style={{
                   ...getItemStyles(),
-                  padding: '10px 20px',
+                  padding: '6px 16px',
                   textDecoration: 'none'
                 }}
                 onClick={() => onClose()}
@@ -371,7 +371,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
                 className="menu-item"
                 style={{
                   ...getItemStyles(),
-                  padding: '10px 20px',
+                  padding: '6px 16px',
                   textDecoration: 'none'
                 }}
                 onClick={() => onClose()}
@@ -383,11 +383,11 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           
           {/* Email Section */}
           <div style={{
-            padding: '20px',
+            padding: '12px 16px',
             borderTop: '1px solid rgba(0, 0, 0, 0.1)'
           }}>
             <h4 style={{
-              margin: '0 0 16px 0',
+              margin: '0 0 8px 0',
               fontSize: '14px',
               fontWeight: '600',
               color: '#666666',
@@ -401,7 +401,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
               className="menu-item"
               style={{
                 ...getItemStyles(),
-                padding: '10px 20px',
+                padding: '6px 16px',
                 textDecoration: 'none'
               }}
               onClick={() => onClose()}
@@ -413,7 +413,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
         
         {/* Footer */}
         <div style={{
-          padding: '20px',
+          padding: '10px 16px',
           borderTop: '1px solid rgba(0, 0, 0, 0.1)',
           fontSize: '12px',
           color: '#999999',
@@ -425,35 +425,29 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       
        {/* Enhanced styles */}
        <style>{`
-        /* Scrollbar styling to match sidebar background */
+        /* Hide scrollbar completely while keeping scroll functionality */
         .hamburger-menu::-webkit-scrollbar,
         .hamburger-menu *::-webkit-scrollbar {
-          width: 8px;
-          height: 8px;
+          width: 0px;
+          height: 0px;
+          display: none;
         }
         
         .hamburger-menu::-webkit-scrollbar-track,
         .hamburger-menu *::-webkit-scrollbar-track {
-          background: #E8E3DA !important; /* Match sidebar background color */
-          border-radius: 4px;
+          display: none;
         }
         
         .hamburger-menu::-webkit-scrollbar-thumb,
         .hamburger-menu *::-webkit-scrollbar-thumb {
-          background: rgba(0, 0, 0, 0.3) !important;
-          border-radius: 4px;
+          display: none;
         }
         
-        .hamburger-menu::-webkit-scrollbar-thumb:hover,
-        .hamburger-menu *::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 0, 0, 0.5) !important;
-        }
-        
-        /* Firefox scrollbar styling */
+        /* Firefox - hide scrollbar */
         .hamburger-menu,
         .hamburger-menu * {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(0, 0, 0, 0.3) #E8E3DA;
+          scrollbar-width: none;
+          -ms-overflow-style: none; /* IE and Edge */
         }
         
         .menu-item:hover {
