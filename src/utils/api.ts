@@ -83,16 +83,36 @@ export async function verifyPassword(
   email: string
 ): Promise<VerifyPasswordResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/verify-password`, {
+    const url = `${API_BASE_URL}/api/auth/verify-password`;
+    const requestBody = { password };
+    
+    console.log('🔐 [API] verifyPassword - Request:', {
+      method: 'POST',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-user-email': email,
+      },
+      body: requestBody,
+    });
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-user-email': email,
       },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify(requestBody),
     });
 
     const data = await response.json();
+
+    console.log('🔐 [API] verifyPassword - Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      data,
+    });
 
     if (!response.ok) {
       throw new Error(data.message || 'Password verification failed');
@@ -100,7 +120,7 @@ export async function verifyPassword(
 
     return data;
   } catch (error) {
-    console.error('Password verification error:', error);
+    console.error('❌ [API] verifyPassword - Error:', error);
     throw error;
   }
 }
@@ -116,21 +136,40 @@ export async function requestPassword(
   totalLabels: number
 ): Promise<RequestPasswordResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/request-password`, {
+    const url = `${API_BASE_URL}/api/auth/request-password`;
+    const requestBody = {
+      email,
+      firstName,
+      secretsFound,
+      totalFound,
+      totalLabels,
+    };
+
+    console.log('📧 [API] requestPassword - Request:', {
+      method: 'POST',
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    });
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        email,
-        firstName,
-        secretsFound,
-        totalFound,
-        totalLabels,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const data = await response.json();
+
+    console.log('📧 [API] requestPassword - Response:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      data,
+    });
 
     if (!response.ok) {
       throw new Error(data.message || 'Password request failed');
@@ -138,7 +177,7 @@ export async function requestPassword(
 
     return data;
   } catch (error) {
-    console.error('Password request error:', error);
+    console.error('❌ [API] requestPassword - Error:', error);
     throw error;
   }
 }
