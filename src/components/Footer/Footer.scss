@@ -47,6 +47,11 @@
     padding-top: 60px; // Further reduced padding to allow last clue to be clickable
     min-height: auto;
   }
+  
+  // On 375px screens specifically, add bottom padding to prevent button from overlapping copyright
+  @media screen and (max-width: 375px) {
+    padding-bottom: 100px; // Add space between button and copyright text
+  }
 }
 
 .footer-text {
@@ -182,6 +187,11 @@
   bottom: 0;
   padding: 40px 10px;
   font-family: Arial, Helvetica, sans-serif;
+
+  // On 375px screens, reduce padding to prevent overlap with button
+  @media screen and (max-width: 375px) {
+    padding: 20px 10px 10px 10px; // Reduced top padding, minimal bottom padding
+  }
 
   @media screen and (min-width: 768px) {
     padding: 10px;    
