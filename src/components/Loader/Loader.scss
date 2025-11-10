@@ -90,19 +90,10 @@ body.no-scroll {
       height: 75px;    
     }
     
-    // Add background circle to improve visibility on light backgrounds
-    // &::before {
-    //   content: '';
-    //   position: absolute;
-    //   top: 50%;
-    //   left: 50%;
-    //   transform: translate(-50%, -50%);
-    //   width: 110%;
-    //   height: 110%;
-    //   background: radial-gradient(circle, rgba(240, 235, 225, 0.8) 0%, rgba(240, 235, 225, 0.6) 50%, transparent 70%);
-    //   border-radius: 50%;
-    //   z-index: -1;
-    // }
+    // Add background circle to improve visibility on mobile (especially over videos)
+    @media screen and (max-width: 767px) {
+      z-index: 1004;
+    }
   }
 }
 

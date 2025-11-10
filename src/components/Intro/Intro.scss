@@ -50,14 +50,15 @@
       // Normal layout, navbar visible, scrollable
       position: relative;
       width: 100%;
-      //margin-top: 61px; // Account for header height
-      height: auto;
-      min-height: auto;
+      margin-top: 0; // Transparent header overlays video on mobile
+      height: auto ; // Full viewport height on mobile
+      min-height: auto !important;
       display: block;
       background: transparent;
       overflow: visible;
 
-      z-index: 1002;
+
+      z-index: 1002; // Keep below header (z-index: 1000)
       // Ensure video starts visible below browser UI
       padding-top: env(safe-area-inset-top, 0px);
     }
@@ -154,14 +155,14 @@
     }
   }
   
-  // Portrait - normal behavior with auto height (no black bars)
+  // Portrait - normal behavior with full height (no black bars)
   &.intro__video--portrait {
     @media screen and (max-width: 1024px) {
       position: relative;
       width: 100%;
       height: auto;
       display: block;
-      object-fit: contain;
+      object-fit: contain; // Cover to fill container, no black bars
       
       // Hide controls in portrait mode
       &::-webkit-media-controls {

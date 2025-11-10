@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Floor } from './components/Floor';
@@ -19,6 +19,17 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
   const groupRef = useRef<THREE.Group>(null);
   const { currentScene } = useScene();
   const isActive = currentScene === 'section-1';
+  
+  // Mobile detection for adjusting label positions
+  const isMobile = useMemo(() => {
+    return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+           ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+  
+  // Adjust label position for last clue on mobile (move white circle left and upward)
+  const lastClueLabelPosition = useMemo((): [number, number, number] => {
+    return isMobile ? [-2.7, 1.0, 0.3] : [1.2, 0.6, 0.3]; // Move even more left and upward on mobile
+  }, [isMobile]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -60,7 +71,7 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
         label={{
           id: 'street-1911',
           scene: 'street',
-          position: [1.2, 0.6, 0.3],
+          position: lastClueLabelPosition,
           rotation: [0, 0, 0],
           imageUrl: 'street/poi/1911.webp',
           text: 'The landmark Ström flagship store in Paris, in the chic neighbourhood of the Opera Garnier'

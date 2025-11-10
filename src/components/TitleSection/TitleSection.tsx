@@ -12,9 +12,10 @@ interface TitleSectionProps {
   titleX?: string | number; // Optional prop for title X position
   triggerOnce?: boolean; // If false, animation can replay when re-entering
   showInstructions?: boolean; // Optional prop to show instruction text
+  contentText?: string; // Optional custom content text to replace default
 }
 
-const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX, triggerOnce = true, showInstructions = false }) => {
+const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX, triggerOnce = true, showInstructions = false, contentText }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -136,6 +137,8 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
               <br />
               collect them all to unlock the Hidden Chamber.
             </div>
+          ) : contentText ? (
+            <div className='title-section-content' dangerouslySetInnerHTML={{ __html: contentText }} />
           ) : (
             <div className='title-section-content'>
               Ström's history holds hidden treasures.

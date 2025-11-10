@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import { ScoreDisplay } from '../components/ScoreDisplay/ScoreDisplay';
 import HamburgerMenu from '../components/HamburgerMenu';
 import { PasswordModal } from '../components/PasswordModal';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -23,9 +22,10 @@ export default function ConnoisseursPage() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(false);
   const heroRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const { setSoundEnabled, setAmbient } = useSound();
+  const { setSoundEnabled, setAmbient, registerVideo, unregisterVideo } = useSound();
 
   // Check if password is already verified in session
   useEffect(() => {
@@ -52,19 +52,63 @@ export default function ConnoisseursPage() {
     }
   }, [location.pathname, setAmbient, setSoundEnabled]);
 
-  // Ensure root element is visible and start at hero section on mount
+  // Ensure root element is visible and start at header on mobile, hero on desktop
   useEffect(() => {
     const rootElement = document.getElementById('root');
     if (rootElement) rootElement.classList.add('loaded');
 
-    // Scroll to the top, then ensure hero is aligned at start
-    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-    setTimeout(() => {
-      heroRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
-    }, 0);
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (isMobile) {
+      // On mobile: start at header (logo should be visible above hero video)
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      // Header will be visible, logo always shown on mobile
+    } else {
+      // On desktop: start at hero section (like before)
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+      setTimeout(() => {
+        heroRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }, 0);
+    }
   }, []);
 
-  // Unmute video after it starts playing (especially for iOS/mobile)
+  // Show header on scroll (like main page)
+  // On mobile: always show header (logo needs to be visible above hero video with no background)
+  useEffect(() => {
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // On mobile, always show header
+    if (isMobile) {
+      setShowHeader(true);
+      return;
+    }
+    
+    // On desktop, show/hide based on scroll
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setShowHeader(true);
+      } else {
+        setShowHeader(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Register video with sound context for mute management
+  useEffect(() => {
+    if (videoRef.current) {
+      registerVideo(videoRef.current);
+    }
+    return () => {
+      if (videoRef.current) {
+        unregisterVideo(videoRef.current);
+      }
+    };
+  }, [registerVideo, unregisterVideo]);
+
+  // Unmute video after it starts playing (for all devices, not just mobile/iOS)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -73,18 +117,29 @@ export default function ConnoisseursPage() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     const handlePlay = () => {
-      // Unmute after video plays (allows iOS audio unlock)
+      // Unmute after video plays (allows iOS audio unlock on mobile, and enables sound on desktop)
       setTimeout(() => {
-        if (video && (isMobile || isIOS)) {
-          video.muted = false;
-          console.log('Unmuting ConnoisseursPage video after play');
+        if (video) {
+          // For mobile/iOS, wait a bit longer for audio unlock
+          // For desktop, unmute immediately
+          if (isMobile || isIOS) {
+            setTimeout(() => {
+              if (video) {
+                video.muted = false;
+                console.log('Unmuting ConnoisseursPage video after play (mobile/iOS)');
+              }
+            }, 500);
+          } else {
+            video.muted = false;
+            console.log('Unmuting ConnoisseursPage video after play (desktop)');
+          }
         }
-      }, 500);
+      }, 100);
     };
 
     // Also unmute on any user interaction (for better iOS compatibility)
     const unlockAudio = () => {
-      if (video && (isMobile || isIOS)) {
+      if (video) {
         setTimeout(() => {
           if (video) {
             video.muted = false;
@@ -96,7 +151,7 @@ export default function ConnoisseursPage() {
 
     video.addEventListener('play', handlePlay);
     
-    // Listen for user interactions to unlock audio
+    // Listen for user interactions to unlock audio (especially important for iOS)
     const events = ['touchstart', 'click'];
     events.forEach(eventType => {
       document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
@@ -159,10 +214,9 @@ export default function ConnoisseursPage() {
   return (
     <LabelInfoProvider>
       <div className="connoisseurs">
-        {/* Sticky header identical styling */}
-        <div className="top-header">
+        {/* Sticky header identical styling - hidden initially, shown on scroll */}
+        <div className={`top-header ${showHeader ? 'show-on-scroll' : 'hidden-on-load'}`}>
           <Logo className="loader-logo move-to-corner" onClick={() => navigate('/')} />
-          <ScoreDisplay />
         </div>
         <HamburgerMenu
           items={menuItems}
@@ -178,7 +232,7 @@ export default function ConnoisseursPage() {
             ref={videoRef}
             className="connoisseurs__video"
             autoPlay 
-            muted 
+            muted={true}
             loop 
             playsInline
             controls={false}

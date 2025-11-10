@@ -81,7 +81,7 @@ const ScenePlane: React.FC<ScenePlaneProps> = memo(({ position = [0, 0, 0], rota
         <DynamicSprite texture='plane/plane_end.webp' fadeInOnCamera order={30} position={[-1, -0.2, 6.5]} rotation={[0,0,0]} size={[7.5, 3.8, 1]} active={isActive} />
 
         <DynamicSprite 
-          texture='plane/people_3.webp' fadeInOnCamera order={40} position={[-2.95,-0.2,8.5]} rotation={[0,0,0]} size={[0.75,1.4,1]} active={isActive} color
+          texture='plane/people_3.webp' fadeInOnCamera order={isMobile ? 200 : 40} position={[-2.95,-0.2,8.5]} rotation={[0,0,0]} size={[0.75,1.4,1]} active={isActive} color
           label={{
             id: 'plane-1911',
             scene: 'plane',
@@ -97,7 +97,7 @@ const ScenePlane: React.FC<ScenePlaneProps> = memo(({ position = [0, 0, 0], rota
         <DynamicSprite texture='plane/people_6.webp' fadeInOnCamera order={40} position={[1,-0.16,8]} rotation={[0,0,0]} size={[0.8,1.5,1]} active={isActive} />
 
         <DynamicSprite 
-          texture='plane/pilot.webp' fadeInOnCamera order={70} position={[-0.5,-0.28,12]} rotation={[0,0,0]} size={[0.65,1.75,1]} active={isActive} color
+          texture='plane/pilot.webp' fadeInOnCamera order={isMobile ? 201 : 70} position={[-0.5,-0.28,12]} rotation={[0,0,0]} size={[0.65,1.75,1]} active={isActive} color
           label={{
             id: 'plane-1912',
             scene: 'plane',

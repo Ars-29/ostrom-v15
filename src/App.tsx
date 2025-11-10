@@ -55,6 +55,21 @@ const App = () => {
     // Only start ambient sounds after the intro (when hasStarted is true AND we're not on intro)
     if (hasStarted && currentScene !== 'intro') {
       console.log('Enabling ambient sound for scene:', currentScene);
+      
+      // iOS/Mobile: Ensure audio context is unlocked when transitioning from intro to first section
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if ((isIOS || isMobile) && currentScene === 'section-1') {
+        // Trigger audio unlock by playing a silent audio
+        const silentAudio = new Audio();
+        silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+        silentAudio.volume = 0.01;
+        silentAudio.play().catch(() => {
+          // Ignore errors
+        });
+        console.log('iOS/Mobile: Audio unlock triggered on section transition');
+      }
+      
       // Enable sound system when we start playing ambient sounds
       setSoundEnabled(true);
       // Map section id to ambient sound key
@@ -149,7 +164,12 @@ const App = () => {
                 </div>        
               </ScrollingText>
               <div className='persona-space persona-1'></div>
-              <TitleSection id="section-2" title='' subtitle='Connoisseurs of speed' />
+              <TitleSection 
+                id="section-2" 
+                title='' 
+                subtitle='Connoisseurs of speed' 
+                contentText="Where velocity refines the craft.<br />Keep tracing the trail."
+              />
               <ScrollingText targetSection=".persona-space.persona-2">
                 <div>
                   <p>&nbsp;</p>
@@ -161,7 +181,13 @@ const App = () => {
                 </div>
               </ScrollingText>
               <div className='persona-space persona-2'></div>
-              <TitleSection id="section-3" title='' subtitle='Above and Beyond' titleX="6%" />
+              <TitleSection 
+                id="section-3" 
+                title='' 
+                subtitle='Above and Beyond' 
+                titleX="6%" 
+                contentText="Where the sky becomes a workshop, transcending the horizon.<br />You are almost there."
+              />
               <ScrollingText targetSection=".persona-space.persona-3">
                 <div>
                   <p>&nbsp;</p>

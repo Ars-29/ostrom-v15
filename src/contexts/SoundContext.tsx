@@ -86,7 +86,18 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audio.loop = true;
     audio.volume = 0;
     audio.muted = muted;
-    audio.play();
+    
+    // iOS: Set preload and ensure audio stays active
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      audio.preload = 'auto';
+      // iOS requires audio to be played in response to user interaction
+      // We'll handle this in the unlock mechanism
+    }
+    
+    audio.play().catch((error) => {
+      console.log('Audio play failed, will retry:', error);
+    });
     ambientAudioRef.current = audio;
     setCurrentAmbient(scene);
     // Fade in
@@ -150,6 +161,66 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, [muted]);
 
+  // iOS: Keep audio alive and resume if paused during scroll
+  React.useEffect(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (!isIOS) return;
+
+    const checkAndResumeAudio = () => {
+      if (ambientAudioRef.current && enabled && !muted) {
+        const audio = ambientAudioRef.current;
+        if (audio.paused && audio.readyState >= 2) {
+          // Audio is paused but loaded - resume it
+          audio.play().catch((error) => {
+            console.log('Failed to resume audio on iOS:', error);
+          });
+          console.log('iOS: Resumed paused ambient audio');
+        }
+      }
+    };
+
+    // Check periodically to resume if paused (iOS may pause during scroll)
+    const resumeInterval = setInterval(checkAndResumeAudio, 500);
+
+    // Also check on scroll events
+    const handleScroll = () => {
+      checkAndResumeAudio();
+    };
+
+    // Check on visibility change (when tab becomes visible again)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        setTimeout(checkAndResumeAudio, 100);
+      }
+    };
+
+    // Check on page show (iOS Safari specific)
+    const handlePageShow = () => {
+      setTimeout(checkAndResumeAudio, 100);
+    };
+
+    // iOS: Resume audio on any touch interaction (iOS requires user gesture to play audio)
+    const handleTouch = () => {
+      checkAndResumeAudio();
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pageshow', handlePageShow);
+    // Listen to touch events to keep audio alive on iOS
+    document.addEventListener('touchstart', handleTouch, { passive: true });
+    document.addEventListener('touchend', handleTouch, { passive: true });
+
+    return () => {
+      clearInterval(resumeInterval);
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pageshow', handlePageShow);
+      document.removeEventListener('touchstart', handleTouch);
+      document.removeEventListener('touchend', handleTouch);
+    };
+  }, [enabled, muted]);
+
   // Unlock audio on iOS/mobile after first user interaction
   React.useEffect(() => {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -178,6 +249,16 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           }
         });
         console.log('Audio unlocked on user interaction');
+        
+        // Also ensure ambient audio is playing if it should be
+        if (ambientAudioRef.current && enabled && !muted) {
+          const audio = ambientAudioRef.current;
+          if (audio.paused) {
+            audio.play().catch(() => {
+              // Ignore errors
+            });
+          }
+        }
       }, 100);
     };
 
@@ -192,7 +273,7 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         document.removeEventListener(eventType, unlockAudio);
       });
     };
-  }, [muted]);
+  }, [muted, enabled]);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({

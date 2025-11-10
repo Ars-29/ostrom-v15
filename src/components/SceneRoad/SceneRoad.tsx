@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Floor } from './components/Floor';
@@ -20,6 +20,15 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
   const { currentScene } = useScene();
   const isActive = currentScene === 'section-2';
   const isMobile = useIsMobile(768);
+  
+  // Adjust label position for last clue on mobile (move white circle left and upward towards center)
+  // Note: Position is relative to sprite at [20, 0.45, 34], so we need to move it significantly left
+  const lastClueLabelPosition = useMemo((): [number, number, number] => {
+    // Move left (negative X) and upward (positive Y) on mobile
+    // Original: [0.65, 0.7, 0.2] places label at ~[20.65, 1.15, 34.2]
+    // Mobile: Move left by ~18 units to bring it to ~[2, 1.15, 34.2] (more centered)
+    return isMobile ? [-0.15, 1.0, -2.5]:[0.65, 0.7, 0.2];
+  }, [isMobile]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -220,11 +229,13 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
             label={{
               id: 'road-1906',
               scene: 'road',
-              position: [0.65, 0.7, 0.2],
+              position: lastClueLabelPosition,
               rotation: [0, 0, 0],
               imageUrl: 'road/poi/1906.webp',
-              text: 'Advanced headgear from Ström – integrated vision for performance lovers.'
-            }}
+              text: 'Advanced headgear from Ström – integrated vision for performance lovers.',
+              // Increase render order for mobile to ensure it's visible above other elements
+              order: isMobile ? 100 : 15
+            } as any}
           />
           {!isMobile && (
             <CarSmokeParticles position={[20,0.45,34]} order={2} windDirection={[0.4,2,-0.5]} />

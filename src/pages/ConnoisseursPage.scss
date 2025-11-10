@@ -1,19 +1,25 @@
 .connoisseurs {
   min-height: 100vh;
   background: #E8E3DA;
-  padding-top: 83px; /* same as .top-header height */
+  padding-top: 0; /* No padding - hero video should be full screen like intro on main page */
 }
 
 @media (max-width: 767px) {
   .connoisseurs {
-    padding-top: 60px; /* mobile header height */
+    padding-top: 0; /* No padding on mobile either */
   }
 }
 
 .connoisseurs__hero {
+  position: relative;
   width: 100%;
   margin-bottom: 3rem; /* 12 */
   background: #000; /* avoid light bands when letterboxed */
+  z-index: 0; /* Keep below header so transparent header can overlay video */
+  
+  @media (max-width: 767px) {
+    height: 60dvh; /* Match video height on mobile */
+  }
 }
 
 .connoisseurs__video {
@@ -29,6 +35,7 @@
   .connoisseurs__video {
     height: 60dvh; /* mobile: 60% of device viewport height */
     max-height: 60dvh;
+    margin-top: 0; /* Header overlays video; no vertical offset needed */
   }
 }
 
@@ -245,6 +252,31 @@
 .top-header .logo-image {
   pointer-events: auto !important;
   cursor: pointer;
+}
+
+/* Hide entire header initially, show on scroll (like main page intro behavior) */
+.top-header.hidden-on-load {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.top-header.show-on-scroll {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* On mobile: always show header (logo needs to be visible above hero video with no background) */
+@media (max-width: 767px) {
+  .top-header.hidden-on-load,
+  .top-header.show-on-scroll {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
 }
 
 

@@ -9,6 +9,27 @@
   z-index: 1001;
   background-color: transparent;
   color: #333;
+  
+  // On mobile, allow pointer events to pass through to 3D scene clues
+  // but keep buttons/links clickable
+  @media screen and (max-width: 767px) {
+    pointer-events: none;
+    
+    // Make footer-content transparent to clicks, only actual content is clickable
+    .footer-content {
+      pointer-events: none;
+      
+      // Make only the actual interactive content clickable
+      .footer-score,
+      .footer-text,
+      .btn,
+      .footer-trophies-row,
+      .footer-trophy-block,
+      * {
+        pointer-events: auto;
+      }
+    }
+  }
 }
 
 .footer-content {
@@ -18,6 +39,14 @@
   align-items: center;
   text-align: center;
   padding: 20px;
+  
+  // On mobile, adjust positioning to allow top area clicks to pass through
+  @media screen and (max-width: 767px) {
+    // Start content from lower position to leave space for clues at top
+    justify-content: flex-start;
+    padding-top: 80px; // Reduced padding - just enough to push content down
+    min-height: auto;
+  }
 }
 
 .footer-text {
@@ -185,4 +214,11 @@
 .footer-separator {
   margin: 0 6px;
   opacity: 0.5;
+}
+
+.footer-score {
+  // On mobile, add top margin to push content down and allow last clue to be clickable
+  @media screen and (max-width: 767px) {
+    margin-top: 60px; // Reduced margin - just enough spacing
+  }
 }
