@@ -71,6 +71,8 @@ canvas {
   pointer-events: none; /* Allow clicks to pass through */
   
   @media screen and (max-width: 767px) {
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
     height: 60px;
     z-index: 1003;
   }

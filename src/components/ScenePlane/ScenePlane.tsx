@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef, memo, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Floor } from './components/Floor';
@@ -21,6 +21,13 @@ const ScenePlane: React.FC<ScenePlaneProps> = memo(({ position = [0, 0, 0], rota
   const { currentScene } = useScene();
   const isActive = currentScene === 'section-3' || currentScene === 'footer';
   const isMobile = useIsMobile(768);
+  
+  // Adjust label position for last clue on mobile (move white circle upward)
+  const lastClueLabelPosition = useMemo((): [number, number, number] => {
+    // Move upward (positive Y) on mobile to make it more clickable
+    // Original: [1.3, 0.75, 0.6]
+    return isMobile ? [1.3, 1.4, 0.6] : [1.3, 0.75, 0.6];
+  }, [isMobile]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -101,7 +108,7 @@ const ScenePlane: React.FC<ScenePlaneProps> = memo(({ position = [0, 0, 0], rota
           label={{
             id: 'plane-1912',
             scene: 'plane',
-            position: [1.3, 0.75, 0.6],
+            position: lastClueLabelPosition,
             rotation: [0, 0, 0],
             imageUrl: 'plane/poi/1912.webp',
             text: 'Chasing clouds, chasing dreams, breaking barriers.'

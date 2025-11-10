@@ -44,13 +44,20 @@
   @media screen and (max-width: 767px) {
     // Start content from lower position to leave space for clues at top
     justify-content: flex-start;
-    padding-top: 80px; // Reduced padding - just enough to push content down
+    padding-top: 60px; // Further reduced padding to allow last clue to be clickable
     min-height: auto;
   }
 }
 
 .footer-text {
   margin: 30px 0 0 0;
+  
+  // On mobile, add spacing between description and button
+  @media screen and (max-width: 767px) {
+    .btn {
+      margin-top: 20px; // Add spacing between description text and button
+    }
+  }
 }
 
 .btn {
@@ -219,6 +226,6 @@
 .footer-score {
   // On mobile, add top margin to push content down and allow last clue to be clickable
   @media screen and (max-width: 767px) {
-    margin-top: 60px; // Reduced margin - just enough spacing
+    margin-top: 40px; // Further reduced margin to allow last clue to be clickable
   }
 }

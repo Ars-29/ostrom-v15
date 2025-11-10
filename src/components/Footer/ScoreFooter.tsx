@@ -84,9 +84,7 @@ const ScoreFooter: React.FC = () => {
               <br />
               The Hidden Chamber awaits — a silent vault of guarded secrets, where exclusive works unfold in avant-première.
             </div>
-            <div className='footer-text'>
-              <button className='btn' onClick={handleEnterChamber}>Enter the Chamber</button>
-            </div>
+            <button className='btn' onClick={handleEnterChamber}>Enter the Chamber</button>
           </div>
         ) : (
           <div className='footer-text'>
@@ -96,9 +94,7 @@ const ScoreFooter: React.FC = () => {
             <div className='description'>
               Keep exploring—something exciting awaits you.
             </div>
-            <div className='footer-text'>
-              <a href="mailto:contact@ostrometfils.com" className='btn'>CONTACT</a>
-            </div>
+            <a href="mailto:contact@ostrometfils.com" className='btn'>CONTACT</a>
           </div>
         )}
       </div>
