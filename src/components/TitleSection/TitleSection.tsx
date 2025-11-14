@@ -15,7 +15,7 @@ interface TitleSectionProps {
   contentText?: string; // Optional custom content text to replace default
 }
 
-const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX, triggerOnce = true, showInstructions = false, contentText }) => {
+const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX: _titleX, triggerOnce = true, showInstructions = false, contentText }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -126,9 +126,15 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
             width={svgWidth}
             height="100%"
           >  
-            <text x="0" y="10%" className='subtitle' textAnchor="start">
-              <tspan x={titleX ?? "2%"} dy="1.2em">{subtitle}</tspan>
-            </text>
+          <text x="50%" y="10%" className='subtitle' textAnchor="middle">
+            {subtitle && subtitle.includes('\n') ? (
+               subtitle.split('\n').map((line, index) => (
+                <tspan key={index} x="50%" dy={index === 0 ? "1.2em" : "1.2em"}>{line}</tspan>
+    ))
+  ) : (
+    <tspan x="50%" dy="1.2em">{subtitle}</tspan>
+  )}
+</text>
           </svg>
           <img src={dividerSrc} alt="Divider" className="loader-divider" />
           {showInstructions ? (

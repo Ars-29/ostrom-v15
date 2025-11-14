@@ -90,7 +90,7 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
               position: [0.9, 1.0, 0.4],
               rotation: [0, 0, 0],
               imageUrl: 'road/poi/1905.webp',
-              text: 'The Cape Gordon Bennett – inspired by the legendary race. Crafted by Ström'
+              text: 'The Cape Gordon Bennett – inspired by the legendary race. Crafted by Ström.'
             }}
           />
 

@@ -101,7 +101,7 @@ const App = () => {
     },
     {
       id: 'urban-pioneer',
-      label: 'The Urban Pionnier',
+      label: 'The Urban Pioneer',
       onClick: () => {
         const element = document.getElementById('section-1');
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -117,7 +117,7 @@ const App = () => {
     },
     {
       id: 'above-beyond',
-      label: 'Above and Beyond',
+      label: "Beyond the horizon's edge, the last veil thins. Almost uncovered.",
       onClick: () => {
         const element = document.getElementById('section-3');
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -184,7 +184,7 @@ const App = () => {
               <TitleSection 
                 id="section-3" 
                 title='' 
-                subtitle='Above and Beyond' 
+                subtitle={"Beyond the horizon's edge,\nthe last veil thins. Almost uncovered."} 
                 titleX="6%" 
                 contentText="Where the sky becomes a workshop, transcending the horizon.<br />You are almost there."
               />
@@ -204,7 +204,7 @@ const App = () => {
             </>
           )}
           <SceneCanvas debugMode={debugMode} />
-          <MuteButton />
+          {hasStarted && <MuteButton />}
           <ServiceWorkerDebug isVisible={debugMode} />
           
           {/* Enhanced UI Components */}

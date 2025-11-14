@@ -202,3 +202,21 @@
     opacity: 1;
   }
 }
+
+#section-3 {
+  @media screen and (min-width: 1140px) {
+    font-size: 4rem; // Keep 4rem for section-3
+  }
+  @media screen and (max-width: 767px) {
+    font-size: 2rem; // Keep 4rem for section-3
+  }
+  .loader-divider{
+    top: -58px
+  }
+  svg .subtitle {
+    transform: translateY(-85px);
+    @media screen and (max-width: 767px) {
+      transform: translateY(-50px); // Pull up the subtitle text
+    }
+  }
+}

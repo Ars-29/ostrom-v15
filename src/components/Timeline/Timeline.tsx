@@ -7,7 +7,7 @@ const sections = [
   { id: 'intro', key: "intro", label: 'Intro' },
   { id: 'section-1-trigger', key: "section-1", label: 'The Urban <br/>Pioneer' },
   { id: 'section-2-trigger', key: "section-2", label: 'Connoisseurs <br/>of speed' },
-  { id: 'section-3-trigger', key: "section-3", label: 'Above and <br/>Beyond' },
+  { id: 'section-3-trigger', key: "section-3", label: "Beyond the horizon's edge,<br/>the last veil thins. Almost uncovered." },
   { id: 'footer', key: "footer", label: 'The End' },
 ];
 
@@ -74,7 +74,7 @@ const Timeline: React.FC = () => {
       {sections.map((section) => (
         <div
           key={section.id}
-          className={`timeline-item active-follower ${activeSection === section.key ? 'active' : ''}`}
+          className={`timeline-item active-follower ${activeSection === section.key ? 'active' : ''} ${section.key === 'section-3' ? 'timeline-item-section-3' : ''}`}
           onClick={() => scrollToSection(section.key + '-trigger')}
         >
           <span className="timeline-item-title" dangerouslySetInnerHTML={{__html: section.label}} />

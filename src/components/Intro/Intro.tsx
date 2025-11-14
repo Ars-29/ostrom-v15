@@ -12,7 +12,13 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
   const [showPlayButton, setShowPlayButton] = useState(false); // fallback if play() fails even after start
   const [isLandscape, setIsLandscape] = useState(false);
   const [showAndroidTapHint, setShowAndroidTapHint] = useState(false);
+  const [showPortraitMessage, setShowPortraitMessage] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [showText, setShowText] = useState(false);
+  const [isFading, setIsFading] = useState(false);
   const { registerVideo, unregisterVideo } = useSound();
+  
+  const fullText = "Turn your device for an immersive experience...";
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,7 +41,19 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
       const isDefinitelyMobile = isTouchDevice && isSmallScreen && screenWidth < 1024;
       
       setIsMobile(isDefinitelyMobile);
-      setIsLandscape(screenWidth > screenHeight);
+      const isPortraitMode = screenWidth < screenHeight;
+      setIsLandscape(!isPortraitMode);
+      
+      // Show portrait message only on mobile portrait mode
+      if (isDefinitelyMobile && isPortraitMode && hasStarted) {
+        setShowPortraitMessage(true);
+        setShowText(true);
+        setDisplayedText(''); // Reset text for animation
+      } else {
+        setShowPortraitMessage(false);
+        setShowText(false);
+        setDisplayedText('');
+      }
     };
 
     handleResize();
@@ -46,7 +64,7 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
-  }, []);
+  }, [hasStarted]);
 
   // Register/unregister video for mute management only
   useEffect(() => {
@@ -469,6 +487,75 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
     }
   }, [isLandscape, isMobile, hasStarted]);
 
+  // Typewriter effect for portrait message - repeats continuously with fade
+  useEffect(() => {
+    if (!showText || !showPortraitMessage || isLandscape) {
+      setDisplayedText('');
+      setIsFading(false);
+      return;
+    }
+
+    let currentIndex = 0;
+    let typeInterval: number | null = null;
+    let fadeTimeout: NodeJS.Timeout | null = null;
+    let resetTimeout: NodeJS.Timeout | null = null;
+    
+    const startTyping = () => {
+      currentIndex = 0;
+      setDisplayedText('');
+      setIsFading(false); // Reset fade state
+      
+      let lastUpdateTime = Date.now();
+      const typeSpeed = 20; // 30ms per letter
+      
+      const animate = () => {
+        const now = Date.now();
+        const elapsed = now - lastUpdateTime;
+        
+        if (elapsed >= typeSpeed) {
+          if (currentIndex < fullText.length) {
+            setDisplayedText(fullText.slice(0, currentIndex + 1));
+            currentIndex++;
+            lastUpdateTime = now;
+            typeInterval = requestAnimationFrame(animate);
+          } else {
+            // After typing completes, wait 2s (text sticks), then fade (1s), then wait 1s before restart
+            if (typeInterval) {
+              cancelAnimationFrame(typeInterval);
+              typeInterval = null;
+            }
+            // Wait 2 seconds with text visible, then start fade
+            fadeTimeout = setTimeout(() => {
+              setIsFading(true);
+              // After fade (1s) + wait (1s) = 2s, restart
+              resetTimeout = setTimeout(() => {
+                startTyping(); // Restart the typing animation
+              }, 2000); // 1s fade + 1s wait = 2s total
+            }, 2000); // 2s stick time before fade
+          }
+        } else {
+          typeInterval = requestAnimationFrame(animate);
+        }
+      };
+      
+      typeInterval = requestAnimationFrame(animate);
+    };
+    
+    startTyping();
+
+    return () => {
+      if (typeInterval !== null) {
+        cancelAnimationFrame(typeInterval);
+      }
+      if (fadeTimeout) {
+        clearTimeout(fadeTimeout);
+      }
+      if (resetTimeout) {
+        clearTimeout(resetTimeout);
+      }
+    };
+  }, [showText, showPortraitMessage, isLandscape, fullText]);
+
   const scrollToContent = () => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
   };
@@ -570,10 +657,18 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
           </div>
         </div>
       )}
+      
       <div className="intro__arrow active-follower" onClick={scrollToContent}>
         <span></span>
       </div>
       <div className='gradient-under'></div>
+      
+      {/* Portrait mode animated text - shows below video in black area on mobile portrait */}
+      {!isLandscape && isMobile && showText && (
+        <div className={`intro__portrait-text-below ${isFading ? 'fading' : ''}`}>
+          {displayedText}
+        </div>
+      )}
     </div>
   );
 };

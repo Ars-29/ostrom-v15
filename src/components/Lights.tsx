@@ -40,6 +40,10 @@ export const Lights: React.FC<{debug?: boolean}> = ({debug}) => {
   const { camera } = useThree();
   const { currentScene } = useScene();
   const isTouchDevice = 'ontouchstart' in window;
+  
+  // Mobile detection for fog adjustment
+  const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
   // Map your app's scene names to light settings
   let sceneKey: string = 'default';
@@ -49,7 +53,17 @@ export const Lights: React.FC<{debug?: boolean}> = ({debug}) => {
   else if (currentScene === 'night') sceneKey = 'night';
   else if (currentScene === 'sunset') sceneKey = 'sunset';
 
-  const { ambient, directional, fog } = sceneLightSettings[sceneKey] || sceneLightSettings['default'];
+  let { ambient, directional, fog } = sceneLightSettings[sceneKey] || sceneLightSettings['default'];
+  
+  // Reduce fog effect on mobile for section-1 (Urban Pioneer) to make Ström shop visible
+  if (currentScene === 'section-1' && isMobile) {
+    fog = { ...fog, far: 40 }; // Significantly reduce fog distance on mobile for better visibility
+  }
+  
+  // Adjust fog effect for section-2 (Connoisseurs of Speed) on desktop at the end of the chapter
+  if (currentScene === 'section-2' && !isMobile) {
+    fog = { ...fog, far: 35 }; // Reduce fog distance on desktop for better visibility at end of chapter
+  }
 
   // useHelper(redLightRef as React.MutableRefObject<THREE.Object3D>, THREE.SpotLightHelper, '#FF0000');
 

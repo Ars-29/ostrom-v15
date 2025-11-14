@@ -76,6 +76,14 @@
   line-height: 1.2em;
 }
 
+// Specific styling for section-3 (Beyond the horizon's edge) to prevent overflow
+.timeline-item-section-3 .timeline-item-title {
+  left: -250px;
+  white-space: normal;
+  max-width: 250px;
+  text-align:left;
+}
+
 .timeline-item:hover .timeline-item-title {
   opacity: 1;
 }

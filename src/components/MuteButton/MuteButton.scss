@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 100000; /* Higher than intro video (99999) to ensure visibility */
   background: none;
   border: none;
   padding: 0;
@@ -28,4 +28,27 @@
   display: block;
   pointer-events: none;
   user-select: none;
+}
+
+/* Mobile optimizations */
+@media screen and (max-width: 767px) {
+  .mute-toggle-btn {
+    bottom: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.85; /* Slightly more visible on mobile */
+  }
+  
+  .mute-toggle-icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Ensure button is always above video content */
+@media screen and (max-width: 1024px) {
+  .mute-toggle-btn {
+    z-index: 100000 !important; /* Force higher z-index on mobile/tablet */
+  }
 }

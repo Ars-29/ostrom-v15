@@ -51,16 +51,19 @@
       position: relative;
       width: 100%;
       margin-top: 0; // Transparent header overlays video on mobile
-      height: auto ; // Full viewport height on mobile
-      min-height: auto !important;
-      display: block;
-      background: transparent;
+      min-height: 100vh; // Full viewport height on mobile
+      min-height: 100dvh; // Dynamic viewport height for mobile browsers
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #000;
       overflow: visible;
-
 
       z-index: 1002; // Keep below header (z-index: 1000)
       // Ensure video starts visible below browser UI
       padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
   }
 }
@@ -76,6 +79,15 @@
   // Default mobile behavior - show full video without cropping
   @media screen and (max-width: 767px) {
     object-fit: contain;
+  }
+  
+  // In portrait mode, override absolute positioning for centering
+  .intro--portrait & {
+    @media screen and (max-width: 1024px) {
+      position: relative;
+      top: auto;
+      left: auto;
+    }
   }
   
   &.intro__video--fullscreen {
@@ -160,9 +172,13 @@
     @media screen and (max-width: 1024px) {
       position: relative;
       width: 100%;
+      max-width: 100%;
       height: auto;
+      max-height: 100vh;
+      max-height: 100dvh;
       display: block;
-      object-fit: contain; // Cover to fill container, no black bars
+      object-fit: contain; // Show full video without cropping
+      margin: 0 auto; // Center horizontally
       
       // Hide controls in portrait mode
       &::-webkit-media-controls {
@@ -414,5 +430,45 @@ body.landscape-fullscreen {
     .hint-text {
       font-weight: 500;
     }
+  }
+}
+
+// Portrait mode animated text - appears below video in black area on mobile portrait
+.intro__portrait-text-below {
+  position: absolute;
+  bottom: 150px; // Position higher up in the black area below video
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 90%;
+  padding: 0;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 1s ease-out;
+  will-change: contents;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  &.fading {
+    opacity: 0;
+  }
+  
+  @media screen and (max-width: 1024px) {
+    // Only show on mobile portrait
+    font-size: 18px;
+    bottom: 140px;
+  }
+  
+  @media screen and (max-width: 767px) {
+    font-size: 16px;
+    bottom: 130px;
+    max-width: 85%;
   }
 }

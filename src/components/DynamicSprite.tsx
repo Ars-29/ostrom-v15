@@ -1,13 +1,13 @@
 import React, { useMemo, useState, memo } from 'react';
 import { TextureLoader, ShaderMaterial, DoubleSide } from 'three';
-import { useLoader, useThree } from '@react-three/fiber';
+import { useLoader, useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import LabelInfo from './LabelInfo';
 import { useOverlayImage } from '../contexts/OverlayImageContext';
 import { useLabelInfo } from '../contexts/LabelInfoContext';
 import { useSound } from '../contexts/SoundContext';
 import { getMobileAssetRouter } from '../utils/MobileAssetRouter';
-import { useOptimizedFrame, useOptimizedCallback } from '../utils/ReactPerformanceOptimizer';
+import { useOptimizedCallback } from '../utils/ReactPerformanceOptimizer';
 
 interface DynamicSpriteProps {
     texture: string; // URL of the texture image
@@ -111,19 +111,19 @@ const DynamicSprite: React.FC<DynamicSpriteProps> = memo(({
       // Color enhancement for more vibrant appearance
       vec3 enhancedColor = textureColor.rgb;
       
-      // Improved contrast and color balance
-      enhancedColor = pow(enhancedColor, vec3(1.1)); // Increase contrast slightly
-      enhancedColor *= 0.7; // Reduce brightness
+      // Improved contrast and color balance - lighter/brighter like production
+      enhancedColor = pow(enhancedColor, vec3(0.95)); // Slightly lighter contrast
+      enhancedColor *= 1.15; // Increase brightness for lighter appearance
       
       // Increase saturation for better color pop
       float luminance = dot(enhancedColor, vec3(0.299, 0.587, 0.114));
-      enhancedColor = mix(vec3(luminance), enhancedColor, 1.2); // Boost saturation
+      enhancedColor = mix(vec3(luminance), enhancedColor, 1.3); // Boost saturation more
       
       enhancedColor = clamp(enhancedColor, 0.0, 1.0);
       
-      // Subtle edge glow effect (reduced intensity)
+      // Enhanced edge glow effect for better visibility
       float edge = 1.0 - smoothstep(0.0, 0.4, abs(maskValue - 0.5) * 2.0);
-      enhancedColor += edge * 0.08 * vec3(1.0, 0.95, 0.9); // Softer warm edge glow
+      enhancedColor += edge * 0.12 * vec3(1.0, 0.95, 0.9); // Brighter warm edge glow
       
       // Ensure complete opacity when animation is finished
       if (uProgress >= 0.99) {
@@ -149,10 +149,10 @@ const DynamicSprite: React.FC<DynamicSpriteProps> = memo(({
       depthWrite: false, // Changed from true to false for better alpha blending
       side: DoubleSide,
     });
-  }, [color, loadedTextureColor, maskTexture, progress, alpha]);
+  }, [color, loadedTextureColor, maskTexture]); // Removed progress and alpha from deps - they're updated in useFrame
 
-  // Optimized useFrame with performance optimizations
-  useOptimizedFrame(() => {
+  // Use regular useFrame for smooth hover animations (no frame skipping)
+  useFrame(() => {
     if (!active) return;
     
     // Mobile optimization: Skip expensive animations and calculations
@@ -193,7 +193,7 @@ const DynamicSprite: React.FC<DynamicSpriteProps> = memo(({
     if (billboard && groupRef.current && camera && !isMobile) {
       groupRef.current.lookAt(camera.position);
     }
-  }, [active, isMobile, isTouchDevice, material, alpha, billboard, groupRef, camera, isOver, progress]);
+  });
 
   const onMouseEnter = useOptimizedCallback(() => {
     if (!isTouchDevice) {
@@ -220,18 +220,7 @@ const DynamicSprite: React.FC<DynamicSpriteProps> = memo(({
 
   return (
     <group ref={groupRef} position={position} rotation={rotationInRadians} visible={isVisible}>
-      {color && material && (
-        <mesh
-          position={[0, size[1] / 2, 0]}
-          renderOrder={order ?? 1}
-          onPointerLeave={onMouseLeave}
-          onPointerEnter={onMouseEnter}
-          onClick={handleSpriteClick}
-        >
-          <planeGeometry args={[size[0], size[1]]} />
-          <primitive object={material} />
-        </mesh>
-      )}
+      {/* Grayscale mesh - renders behind */}
       <mesh
         position={[0, size[1] / 2, -0.01]}
         renderOrder={order ?? 1}
@@ -249,6 +238,20 @@ const DynamicSprite: React.FC<DynamicSpriteProps> = memo(({
           alphaTest={0.7}
         />
       </mesh>
+
+      {/* Color mesh - renders in front with higher render order */}
+      {color && material && (
+        <mesh
+          position={[0, size[1] / 2, 0]}
+          renderOrder={(order ?? 1) + 0.1}
+          onPointerLeave={onMouseLeave}
+          onPointerEnter={onMouseEnter}
+          onClick={handleSpriteClick}
+        >
+          <planeGeometry args={[size[0], size[1]]} />
+          <primitive object={material} />
+        </mesh>
+      )}
 
       {label && (
         <LabelInfo

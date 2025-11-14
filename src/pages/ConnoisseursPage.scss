@@ -51,6 +51,7 @@
 }
 
 .connoisseurs__title {
+  padding-top: 50px;
   margin-bottom: 0.75rem;
   font-family: var(--title-font); /* match TitleSection */
   font-size: clamp(2.5rem, 6vw, 6rem);
@@ -94,6 +95,13 @@
 .connoisseurs__divider-star {
   font-size: 1.5rem; /* text-2xl */
   line-height: 1;
+}
+
+.connoisseurs__description {
+  padding: 0 1.5rem 3rem; /* px-6 pb-12 */
+  text-align: center;
+  position: relative;
+  z-index: 1; /* Below navbar but above other content */
 }
 
 .connoisseurs__lead {
@@ -247,11 +255,25 @@
   }
 }
 
+/* Ensure navbar container is above description and other content */
+.connoisseurs .top-header {
+  z-index: 1004 !important; /* Higher than description (1) and other content */
+  position: fixed !important;
+}
+
 .top-header .loader-logo,
 .top-header .logo,
 .top-header .logo-image {
   pointer-events: auto !important;
   cursor: pointer;
+  position: relative;
+  z-index: 1005 !important; /* Ensure logo is above everything */
+}
+
+/* Ensure hamburger menu button is visible above description */
+.connoisseurs .hamburger-button {
+  z-index: 1004 !important; /* Same level as top-header to ensure visibility */
+  position: fixed !important;
 }
 
 /* Hide entire header initially, show on scroll (like main page intro behavior) */
@@ -271,6 +293,10 @@
 
 /* On mobile: always show header (logo needs to be visible above hero video with no background) */
 @media (max-width: 767px) {
+  .connoisseurs .top-header {
+    z-index: 1004 !important; /* Consistent z-index on mobile */
+  }
+  
   .top-header.hidden-on-load,
   .top-header.show-on-scroll {
     opacity: 1 !important;

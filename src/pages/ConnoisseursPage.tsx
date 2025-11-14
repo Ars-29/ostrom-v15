@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { LabelInfoProvider } from '../contexts/LabelInfoContext';
 import { useSound } from '../contexts/SoundContext';
 import Logo from '../components/Logo/Logo';
+import MuteButton from '../components/MuteButton/MuteButton';
 import './ConnoisseursPage.scss';
 
 // Optimized public asset paths
@@ -22,14 +23,16 @@ export default function ConnoisseursPage() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [showHeader, setShowHeader] = useState(false);
+  const [showHeader, setShowHeader] = useState(true); // Start visible so navbar is above description from the start
   const heroRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const { setSoundEnabled, setAmbient, registerVideo, unregisterVideo } = useSound();
+  const { setSoundEnabled, setAmbient, registerVideo, unregisterVideo, muted } = useSound();
 
   // Check if password is already verified in session
+  const [isPasswordVerified, setIsPasswordVerified] = useState(false);
   useEffect(() => {
     const isVerified = sessionStorage.getItem('passwordVerified') === 'true';
+    setIsPasswordVerified(isVerified);
     if (!isVerified) {
       // Show password modal if not verified
       setIsPasswordModalOpen(true);
@@ -52,24 +55,13 @@ export default function ConnoisseursPage() {
     }
   }, [location.pathname, setAmbient, setSoundEnabled]);
 
-  // Ensure root element is visible and start at header on mobile, hero on desktop
+  // Ensure root element is visible and start at top (showing header and description first)
   useEffect(() => {
     const rootElement = document.getElementById('root');
     if (rootElement) rootElement.classList.add('loaded');
 
-    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
-    if (isMobile) {
-      // On mobile: start at header (logo should be visible above hero video)
-      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-      // Header will be visible, logo always shown on mobile
-    } else {
-      // On desktop: start at hero section (like before)
-      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-      setTimeout(() => {
-        heroRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
-      }, 0);
-    }
+    // Always start at the top so user sees header and description first
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
   }, []);
 
   // Show header on scroll (like main page)
@@ -83,13 +75,13 @@ export default function ConnoisseursPage() {
       return;
     }
     
-    // On desktop, show/hide based on scroll
+    // On desktop, show header from the start (since description is visible and navbar should overlay it)
+    setShowHeader(true);
+    
+    // Keep scroll handler for any future scroll-based behavior if needed
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setShowHeader(true);
-      } else {
-        setShowHeader(false);
-      }
+      // Navbar stays visible on desktop for this page
+      setShowHeader(true);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -108,7 +100,46 @@ export default function ConnoisseursPage() {
     };
   }, [registerVideo, unregisterVideo]);
 
+  // Explicitly play video on refresh if password is already verified
+  useEffect(() => {
+    if (isPasswordVerified && videoRef.current) {
+      const video = videoRef.current;
+      // Ensure video is loaded and ready
+      const playVideo = async () => {
+        try {
+          // If video is already playing, don't restart
+          if (video.paused) {
+            await video.play();
+            console.log('ConnoisseursPage: Video started on refresh (password already verified)');
+          }
+        } catch (error) {
+          console.log('ConnoisseursPage: Video autoplay blocked, will play on user interaction:', error);
+          // If autoplay is blocked, video will play on first user interaction
+        }
+      };
+
+      // Wait for video to be ready
+      if (video.readyState >= 2) {
+        // Video is already loaded
+        playVideo();
+      } else {
+        // Wait for video to load
+        video.addEventListener('loadeddata', playVideo, { once: true });
+        return () => {
+          video.removeEventListener('loadeddata', playVideo);
+        };
+      }
+    }
+  }, [isPasswordVerified]);
+
+  // Track current mute state in a ref to avoid closure issues
+  const mutedRef = useRef(muted);
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
   // Unmute video after it starts playing (for all devices, not just mobile/iOS)
+  // But respect the muted state from SoundContext
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -118,13 +149,14 @@ export default function ConnoisseursPage() {
 
     const handlePlay = () => {
       // Unmute after video plays (allows iOS audio unlock on mobile, and enables sound on desktop)
+      // But only if not muted in the context
       setTimeout(() => {
-        if (video) {
+        if (video && !mutedRef.current) {
           // For mobile/iOS, wait a bit longer for audio unlock
           // For desktop, unmute immediately
           if (isMobile || isIOS) {
             setTimeout(() => {
-              if (video) {
+              if (video && !mutedRef.current) {
                 video.muted = false;
                 console.log('Unmuting ConnoisseursPage video after play (mobile/iOS)');
               }
@@ -138,10 +170,20 @@ export default function ConnoisseursPage() {
     };
 
     // Also unmute on any user interaction (for better iOS compatibility)
-    const unlockAudio = () => {
-      if (video) {
+    // But only if not muted in the context - check current state, not closure
+    let audioUnlocked = false;
+    const unlockAudio = (event: Event) => {
+      // Don't unlock if clicking on mute button
+      const target = event.target as HTMLElement;
+      if (target?.closest('.mute-toggle-btn')) {
+        return;
+      }
+      
+      // Check current mute state, not captured value
+      if (video && !mutedRef.current && !audioUnlocked) {
+        audioUnlocked = true;
         setTimeout(() => {
-          if (video) {
+          if (video && !mutedRef.current) {
             video.muted = false;
             console.log('Unmuting ConnoisseursPage video on user interaction');
           }
@@ -152,24 +194,31 @@ export default function ConnoisseursPage() {
     video.addEventListener('play', handlePlay);
     
     // Listen for user interactions to unlock audio (especially important for iOS)
-    const events = ['touchstart', 'click'];
-    events.forEach(eventType => {
-      document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
-    });
+    // Only listen once, and only if not muted
+    if (!muted) {
+      const events = ['touchstart', 'click'];
+      events.forEach(eventType => {
+        document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
+      });
+
+      return () => {
+        video.removeEventListener('play', handlePlay);
+        events.forEach(eventType => {
+          document.removeEventListener(eventType, unlockAudio);
+        });
+      };
+    }
 
     return () => {
       video.removeEventListener('play', handlePlay);
-      events.forEach(eventType => {
-        document.removeEventListener(eventType, unlockAudio);
-      });
     };
-  }, []);
+  }, [muted]);
 
   const menuItems = [
     { id: 'home', label: 'Home', onClick: () => navigate('/') },
     {
       id: 'urban-pioneer',
-      label: 'The Urban Pionnier',
+      label: 'The Urban Pioneer',
       onClick: () => {
         navigate('/');
         setTimeout(() => {
@@ -191,7 +240,7 @@ export default function ConnoisseursPage() {
     },
     {
       id: 'above-beyond',
-      label: 'Above and Beyond',
+      label: "Beyond the horizon's edge, the last veil thins. Almost uncovered.",
       onClick: () => {
         navigate('/');
         setTimeout(() => {
@@ -226,6 +275,27 @@ export default function ConnoisseursPage() {
           position="left"
         />
 
+        {/* Header */}
+        <header className="connoisseurs__header">
+          <h1 className="connoisseurs__title">
+            The Hidden Chamber
+          </h1>
+          <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
+        </header>
+
+        {/* Description */}
+        <div className="connoisseurs__description">
+          <p className="connoisseurs__lead">
+            A glimpse into the rebirth of a legendary Parisian house.
+            <br />
+            Archival fragments, hands at work, and echoes of the past guide you into
+            <br />
+            the Hidden Chamber — a private, exclusive space unlocked by your unique password,
+            <br />
+            where creations and stories are revealed in avant-première.
+          </p>
+        </div>
+
         {/* Hero Video Section */}
         <section ref={heroRef} className="connoisseurs__hero">
           <video 
@@ -241,23 +311,6 @@ export default function ConnoisseursPage() {
             Your browser does not support the video tag.
           </video>
         </section>
-
-        {/* Header */}
-        <header className="connoisseurs__header">
-          <h1 className="connoisseurs__title">
-            The Hidden Chamber
-          </h1>
-          <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
-          <p className="connoisseurs__lead">
-            A glimpse into the rebirth of a forgotten Parisian house.
-            <br />
-            Archival fragments, hands at work, and echoes of the past guide you into the Hidden Chamber —
-            <br />
-            a private, exclusive space unlocked by your unique password,
-            <br />
-            where creations and stories are revealed in avant-première.
-          </p>
-        </header>
 
         {/* Main Content */}
         <main className="connoisseurs__main">
@@ -343,6 +396,9 @@ export default function ConnoisseursPage() {
         <footer className="connoisseurs__footer">
           <p className="connoisseurs__footer-text">© 2025 The Hidden Chamber. All rights reserved.</p>
         </footer>
+
+        {/* Mute Button - same position as main page */}
+        <MuteButton />
       </div>
 
       <PasswordModal
@@ -354,7 +410,16 @@ export default function ConnoisseursPage() {
         }}
         onSuccess={() => {
           setIsPasswordModalOpen(false);
+          setIsPasswordVerified(true);
           // Password verified, user can now view the page
+          // Video will play automatically via autoPlay, but ensure it plays if autoplay is blocked
+          setTimeout(() => {
+            if (videoRef.current && videoRef.current.paused) {
+              videoRef.current.play().catch((error) => {
+                console.log('ConnoisseursPage: Video play after password verification failed:', error);
+              });
+            }
+          }, 100);
         }}
       />
     </LabelInfoProvider>
