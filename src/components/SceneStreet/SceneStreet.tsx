@@ -41,6 +41,16 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
     return isMobile ? [3.9, 0, 13.2] : [4.5, 0, 14.2]; // Adjust x and z to match shop alignment on mobile
   }, [isMobile]);
 
+  // Adjust first clue position for mobile (move away from wall to prevent cutoff)
+  const firstCluePosition = useMemo((): [number, number, number] => {
+    return isMobile ? [1.5, 0.02, 3.0] : [2, 0.02, 2.5]; // Move right and forward on mobile to prevent cutoff
+  }, [isMobile]);
+
+  // Adjust first clue label position for mobile
+  const firstClueLabelPosition = useMemo((): [number, number, number] => {
+    return isMobile ? [0.85, 0.65, 0.1] : [0.85, 0.65, 0.1]; // Keep same relative position
+  }, [isMobile]);
+
   useEffect(() => {
     if (groupRef.current) {
       groupRef.current.position.set(position[0], position[1], position[2]);
@@ -155,11 +165,11 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
       <DynamicSprite texture='street/man-secondplan-4.webp' order={3} position={[4.55, 0.03, 17.5]} rotation={[0, -45, 0]} size={[0.32,0.7,1]} active={isActive} />
 
       <DynamicSprite 
-        texture='street/man-secondplan-6.webp' order={3} position={[2, 0.02, 2.5]} rotation={[0, -10, 0]} size={[0.3,0.8,1]} active={isActive} color
+        texture='street/man-secondplan-6.webp' order={3} position={firstCluePosition} rotation={[0, -10, 0]} size={[0.3,0.8,1]} active={isActive} color
         label={{
           id: 'street-1901',
           scene: 'street',
-          position: [0.85, 0.65, 0.1],
+          position: firstClueLabelPosition,
           rotation: [0, 0, 0],
           imageUrl: 'street/poi/1901.webp',
           text: 'Ström – inventors of automotive fashion'
