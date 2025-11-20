@@ -57,7 +57,7 @@ export const Lights: React.FC<{debug?: boolean}> = ({debug}) => {
   
   // Reduce fog effect on mobile for section-1 (Urban Pioneer) to make Ström shop visible
   if (currentScene === 'section-1' && isMobile) {
-    fog = { ...fog, far: 40 }; // Significantly reduce fog distance on mobile for better visibility
+    fog = { ...fog, far: 28, near: 5 }; // Further reduce fog distance on mobile to ensure full Ström shop logo visibility
   }
   
   // Adjust fog effect for section-2 (Connoisseurs of Speed) on desktop at the end of the chapter

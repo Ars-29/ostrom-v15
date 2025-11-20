@@ -31,6 +31,16 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
     return isMobile ? [-2.7, 1.0, 0.3] : [1.2, 0.6, 0.3]; // Move even more left and upward on mobile
   }, [isMobile]);
 
+  // Adjust Ström shop position for mobile (move upward for better visibility)
+  const stromShopPosition = useMemo((): [number, number, number] => {
+    return isMobile ? [5.0, 0, 20.1] : [5.6, 0, 21.1]; // Move upward on mobile
+  }, [isMobile]);
+
+  // Adjust building behind Ström shop position for mobile to align with shop
+  const stromBuildingPosition = useMemo((): [number, number, number] => {
+    return isMobile ? [3.9, 0, 13.2] : [4.5, 0, 14.2]; // Adjust x and z to match shop alignment on mobile
+  }, [isMobile]);
+
   useEffect(() => {
     if (groupRef.current) {
       groupRef.current.position.set(position[0], position[1], position[2]);
@@ -65,9 +75,9 @@ const SceneStreet: React.FC<SceneStreetProps> = memo(({ position = [0, 0, 0], ro
         <DynamicSprite texture='street/building-secondplan-2-2.webp' order={0} position={[-5.74,0,13]} rotation={[0,0,0]} size={[2.5,9,1]} active={isActive} />
         <DynamicSprite texture='street/building-secondplan-2-3.webp' order={1} position={[-11.95,0,8]} rotation={[0,-45,0]} size={[14,8,1]} active={isActive} />
       </group>
-      <DynamicSprite texture='street/building-secondplan-1_flat.webp' order={1} position={[4.5,0,14.2]} rotation={[0,-80,0]} size={[24,8,1]} active={isActive} />     
+      <DynamicSprite texture='street/building-secondplan-1_flat.webp' order={1} position={stromBuildingPosition} rotation={[0,-80,0]} size={[24,8,1]} active={isActive} />     
       <DynamicSprite 
-        texture='street/building-secondplan-strom.webp' order={1} position={[5.6,0,21.1]} rotation={[0,-80,0]} size={[8.5,2.9,1]} active={isActive} color 
+        texture='street/building-secondplan-strom.webp' order={1} position={stromShopPosition} rotation={[0,-80,0]} size={[8.5,2.9,1]} active={isActive} color 
         label={{
           id: 'street-1911',
           scene: 'street',

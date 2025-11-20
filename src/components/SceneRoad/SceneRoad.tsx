@@ -27,7 +27,12 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
     // Move left (negative X) and upward (positive Y) on mobile
     // Original: [0.65, 0.7, 0.2] places label at ~[20.65, 1.15, 34.2]
     // Mobile: Move left by ~18 units to bring it to ~[2, 1.15, 34.2] (more centered)
-    return isMobile ? [-0.15, 1.0, -2.5]:[0.65, 0.7, 0.2];
+    return isMobile ? [1.0, 0.7, 0.1]:[0.65, 0.7, 0.2];
+  }, [isMobile]);
+
+  // Adjust last clue car position for mobile (move left towards center to prevent cutoff)
+  const lastClueCarPosition = useMemo((): [number, number, number] => {
+    return isMobile ? [18.5, 0.45, 34] : [20, 0.45, 34]; // Move left by 6 units on mobile to bring it more towards center
   }, [isMobile]);
 
   useEffect(() => {
@@ -225,7 +230,7 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
           )}
 
           <DynamicSprite 
-            texture='road/car_14.webp' order={15} position={[20,0.45,34]} rotation={[0,0,0]} size={[1,1,1]} active={isActive} color 
+            texture='road/car_14.webp' order={15} position={lastClueCarPosition} rotation={[0,0,0]} size={[1,1,1]} active={isActive} color 
             label={{
               id: 'road-1906',
               scene: 'road',
@@ -238,7 +243,7 @@ const SceneRoad: React.FC<SceneRoadProps> = memo(({ position = [0, 0, 0], rotati
             } as any}
           />
           {!isMobile && (
-            <CarSmokeParticles position={[20,0.45,34]} order={2} windDirection={[0.4,2,-0.5]} />
+            <CarSmokeParticles position={lastClueCarPosition} order={2} windDirection={[0.4,2,-0.5]} />
           )}
         </>
       )}

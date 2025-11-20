@@ -162,7 +162,7 @@ export default function ConnoisseursPage() {
               }
             }, 500);
           } else {
-            video.muted = false;
+          video.muted = false;
             console.log('Unmuting ConnoisseursPage video after play (desktop)');
           }
         }
@@ -196,17 +196,17 @@ export default function ConnoisseursPage() {
     // Listen for user interactions to unlock audio (especially important for iOS)
     // Only listen once, and only if not muted
     if (!muted) {
-      const events = ['touchstart', 'click'];
-      events.forEach(eventType => {
-        document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
-      });
+    const events = ['touchstart', 'click'];
+    events.forEach(eventType => {
+      document.addEventListener(eventType, unlockAudio, { once: true, passive: true });
+    });
 
-      return () => {
-        video.removeEventListener('play', handlePlay);
-        events.forEach(eventType => {
-          document.removeEventListener(eventType, unlockAudio);
-        });
-      };
+    return () => {
+      video.removeEventListener('play', handlePlay);
+      events.forEach(eventType => {
+        document.removeEventListener(eventType, unlockAudio);
+      });
+    };
     }
 
     return () => {
