@@ -39,14 +39,14 @@ const ScoreFooter: React.FC = () => {
       setIsEmailModalOpen(true);
     } else {
       // Not all secrets found - navigate directly (will show password modal on that page)
-      navigate('/the-hidden-chamber');
+      navigate('/the-masked-sanctuary');
     }
   };
 
   const handleEmailModalSuccess = () => {
     setIsEmailModalOpen(false);
-    // Navigate to the hidden chamber after email is submitted
-    navigate('/the-hidden-chamber');
+    // Navigate to the Masked Sanctuary after email is submitted
+    navigate('/the-masked-sanctuary');
   };
 
   return (
@@ -82,7 +82,7 @@ const ScoreFooter: React.FC = () => {
               Welcome to the inner circle.
               <br />
               <br />
-              The Hidden Chamber awaits — a silent vault of guarded secrets, where exclusive works unfold in avant-première.
+              The Masked Sanctuary awaits — a silent vault of guarded secrets, where exclusive works unfold in avant-première.
             </div>
             <button className='btn' onClick={handleEnterChamber}>Enter the Chamber</button>
           </div>

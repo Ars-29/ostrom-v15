@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <SceneProvider>
             <Routes>
               <Route path="/" element={<ProgressiveApp />} />
-              <Route path="/the-hidden-chamber" element={<ConnoisseursPage />} />
+              <Route path="/the-masked-sanctuary" element={<ConnoisseursPage />} />
             </Routes>
           </SceneProvider>
         </SoundProvider>

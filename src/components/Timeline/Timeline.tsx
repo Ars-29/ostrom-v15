@@ -6,8 +6,8 @@ import './Timeline.scss';
 const sections = [
   { id: 'intro', key: "intro", label: 'Intro' },
   { id: 'section-1-trigger', key: "section-1", label: 'The Urban <br/>Pioneer' },
-  { id: 'section-2-trigger', key: "section-2", label: 'Connoisseurs <br/>of speed' },
-  { id: 'section-3-trigger', key: "section-3", label: "Beyond the horizon's edge,<br/>the last veil thins. Almost uncovered." },
+  { id: 'section-2-trigger', key: "section-2", label: 'Connoisseurs <br/>of Speed' },
+  { id: 'section-3-trigger', key: "section-3", label: "Beyond the Horizon's Edge" },
   { id: 'footer', key: "footer", label: 'The End' },
 ];
 

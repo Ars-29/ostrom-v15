@@ -48,7 +48,7 @@ export default function ConnoisseursPage() {
 
   // Stop audio when navigating away from this route
   useEffect(() => {
-    if (location.pathname !== '/the-hidden-chamber') {
+    if (location.pathname !== '/the-masked-sanctuary') {
       console.log('Navigated away from ConnoisseursPage - stopping audio');
       setAmbient(null);
       setSoundEnabled(false);
@@ -240,7 +240,7 @@ export default function ConnoisseursPage() {
     },
     {
       id: 'above-beyond',
-      label: "Beyond the horizon's edge, the last veil thins. Almost uncovered.",
+      label: "Beyond the Horizon's Edge",
       onClick: () => {
         navigate('/');
         setTimeout(() => {
@@ -251,7 +251,7 @@ export default function ConnoisseursPage() {
     },
     {
       id: 'hidden-chamber',
-      label: 'The Hidden Chamber',
+      label: 'The Masked Sanctuary',
       onClick: () => {
         // Already on this page, just close menu
         setIsMenuOpen(false);
@@ -278,7 +278,7 @@ export default function ConnoisseursPage() {
         {/* Header */}
         <header className="connoisseurs__header">
           <h1 className="connoisseurs__title">
-            The Hidden Chamber
+            The Masked Sanctuary
           </h1>
           <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
         </header>
@@ -286,13 +286,13 @@ export default function ConnoisseursPage() {
         {/* Description */}
         <div className="connoisseurs__description">
           <p className="connoisseurs__lead">
-            A glimpse into the rebirth of a legendary Parisian house.
+            A preview of the renaissance of a pioneering Parisian House.
             <br />
-            Archival fragments, hands at work, and echoes of the past guide you into
             <br />
-            the Hidden Chamber — a private, exclusive space unlocked by your unique password,
+            Insights into the laps ahead, masterful hands in motion, and a trajectory shaped by trailblazers, are revealed in our Masked Sanctuary.
             <br />
-            where creations and stories are revealed in avant-première.
+            <br />
+            An intimate, invitation-only enclave unlocked by your personal code, where creations and narratives are revealed ahead of the starting flag.
           </p>
         </div>
 
@@ -394,7 +394,7 @@ export default function ConnoisseursPage() {
 
         {/* Footer */}
         <footer className="connoisseurs__footer">
-          <p className="connoisseurs__footer-text">© 2025 The Hidden Chamber. All rights reserved.</p>
+          <p className="connoisseurs__footer-text">© 2025 The Masked Sanctuary. All rights reserved.</p>
         </footer>
 
         {/* Mute Button - same position as main page */}

@@ -1,10 +1,10 @@
 /**
- * API Service for The Hidden Chamber Authentication
+ * API Service for The Masked Sanctuary Authentication
  * 
  * ENDPOINTS DOCUMENTATION:
  * 
  * 1. POST /api/auth/verify-password
- *    Purpose: Verify password for accessing The Hidden Chamber
+ *    Purpose: Verify password for accessing The Masked Sanctuary
  *    Request Body:
  *      {
  *        password: string
@@ -76,7 +76,7 @@ export interface RequestPasswordResponse {
 }
 
 /**
- * Verify password for The Hidden Chamber access
+ * Verify password for The Masked Sanctuary access
  */
 export async function verifyPassword(
   password: string,

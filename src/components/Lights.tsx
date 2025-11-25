@@ -40,7 +40,7 @@ export const Lights: React.FC<{debug?: boolean}> = ({debug}) => {
   const { camera } = useThree();
   const { currentScene } = useScene();
   const isTouchDevice = 'ontouchstart' in window;
-  
+
   // Mobile detection for fog adjustment
   const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                    ('ontouchstart' in window || navigator.maxTouchPoints > 0);

@@ -141,7 +141,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
             <div className='title-section-content'>
               Uncover Ström's treasures through time,
               <br />
-              collect them all to unlock the Hidden Chamber.
+              collect them all to unlock the Masked Sanctuary.
             </div>
           ) : contentText ? (
             <div className='title-section-content' dangerouslySetInnerHTML={{ __html: contentText }} />

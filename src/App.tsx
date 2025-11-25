@@ -117,7 +117,7 @@ const App = () => {
     },
     {
       id: 'above-beyond',
-      label: "Beyond the horizon's edge, the last veil thins. Almost uncovered.",
+      label: "Beyond the Horizon's Edge",
       onClick: () => {
         const element = document.getElementById('section-3');
         element?.scrollIntoView({ behavior: 'smooth' });
@@ -125,10 +125,10 @@ const App = () => {
     },
     {
       id: 'hidden-chamber',
-      label: 'The Hidden Chamber',
+      label: 'The Masked Sanctuary',
       onClick: () => {
-        // Navigate to hidden chamber - password modal will handle authentication
-        navigate('/the-hidden-chamber');
+        // Navigate to The Masked Sanctuary - password modal will handle authentication
+        navigate('/the-masked-sanctuary');
       }
     }
   ];
@@ -149,7 +149,12 @@ const App = () => {
             <>
               <Intro hasStarted={hasStarted} />
               <Timeline />
-              <TitleSection id="section-1" title='' subtitle='The Urban Pioneer' showInstructions={true} />
+              <TitleSection 
+                id="section-1" 
+                title='' 
+                subtitle='The Urban Pioneer' 
+                contentText="Ström's history holds hidden treasures. Collect them all to unlock the Masked Sanctuary."
+              />
               <ScrollingText targetSection=".persona-space.persona-1">
                 <div>
                   <p>&nbsp;</p>
@@ -167,8 +172,8 @@ const App = () => {
               <TitleSection 
                 id="section-2" 
                 title='' 
-                subtitle='Connoisseurs of speed' 
-                contentText="Where velocity refines the craft.<br />Keep tracing the trail."
+                subtitle='Connoisseurs of Speed' 
+                contentText="The pace quickens.<br/>Keep to the track and follow the markers that will guide you to the Masked Sanctuary."
               />
               <ScrollingText targetSection=".persona-space.persona-2">
                 <div>
@@ -184,9 +189,9 @@ const App = () => {
               <TitleSection 
                 id="section-3" 
                 title='' 
-                subtitle={"Beyond the horizon's edge,\nthe last veil thins. Almost uncovered."} 
+                subtitle="Beyond the Horizon's Edge" 
                 titleX="6%" 
-                contentText="Where the sky becomes a workshop, transcending the horizon.<br />You are almost there."
+                contentText="The last veil thins. The Masked Sanctuary is within reach."
               />
               <ScrollingText targetSection=".persona-space.persona-3">
                 <div>

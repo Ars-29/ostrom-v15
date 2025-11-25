@@ -106,7 +106,7 @@ export const EmailModal: React.FC<EmailModalProps> = ({
                 Your password will be sent to <strong>{email}</strong> shortly.
                 <br />
                 <br />
-                Please check your inbox (and spam folder) for access to The Hidden Chamber.
+                Please check your inbox (and spam folder) for access to The Masked Sanctuary.
               </p>
               <div className="email-modal-success-icon">✓</div>
             </>
@@ -117,7 +117,7 @@ export const EmailModal: React.FC<EmailModalProps> = ({
                 You've discovered all {totalLabels} secrets!
                 <br />
                 <br />
-                Enter your email address to receive your unique password for The Hidden Chamber.
+                Enter your email address to receive your unique password for The Masked Sanctuary.
               </p>
               
               <form onSubmit={handleSubmit} className="email-modal-form">

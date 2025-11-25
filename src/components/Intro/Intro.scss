@@ -1,17 +1,16 @@
 .intro {
   position: relative;
   width: 100%;
-  height: var(--app-height);
+ height: var(--app-height);
   z-index: 50;
 
   
   
-    @media screen and (min-width: 1025px) {
+    @media screen and (min-width: 1024px) {
       //margin-top: 84px; // Remove margin, use padding on video instead
-      height: auto;
       width: 100%;
-      min-height: calc(100vh + 90px); // Extend to accommodate navbar height
-      padding-top: 90px;
+      min-height: 100vh;
+      height: auto; // Allow container to grow with video
       z-index: 1002; // Push video content down
     }
   
@@ -73,8 +72,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: calc(100vh + 20px);
+  height: auto;
   object-fit: cover;
+  
+  // Desktop - ensure video fills container
+  @media screen and (min-width: 1024px) {
+    min-height: 100vh;
+    height: 100vh;
+    object-fit: cover;
+  }
   
   // Default mobile behavior - show full video without cropping
   @media screen and (max-width: 767px) {
@@ -470,5 +477,102 @@ body.landscape-fullscreen {
     font-size: 16px;
     bottom: 130px;
     max-width: 85%;
+  }
+}
+// Landscape mode end message - prompts user to rotate to portrait
+.intro__landscape-end-message {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200000;
+  pointer-events: none;
+  animation: fadeInLandscapeMessage 0.5s ease-in;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  
+  @media screen and (max-width: 1024px) {
+    // Only show on mobile landscape
+  }
+  
+  .landscape-end-content {
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    max-width: 85%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    animation: pulseLandscapeMessage 2s ease-in-out infinite;
+    
+    .landscape-end-icon {
+      font-size: 48px;
+      animation: rotateIcon 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+    
+    .landscape-end-text {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: 0.5px;
+    }
+    
+    @media screen and (max-width: 767px) {
+      padding: 25px 30px;
+      gap: 15px;
+      max-width: 90%;
+      
+      .landscape-end-icon {
+        font-size: 40px;
+      }
+      
+      .landscape-end-text {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+@keyframes fadeInLandscapeMessage {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseLandscapeMessage {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@keyframes rotateIcon {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(15deg);
   }
 }

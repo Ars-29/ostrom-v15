@@ -14,8 +14,8 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
-  title = 'Enter The Hidden Chamber',
-  message = 'Please enter your password to access The Hidden Chamber.',
+  title = 'Enter The Masked Sanctuary',
+  message = 'Please enter your password to access The Masked Sanctuary.',
 }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

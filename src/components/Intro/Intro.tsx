@@ -16,9 +16,11 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [showText, setShowText] = useState(false);
   const [isFading, setIsFading] = useState(false);
+  const [showLandscapeEndMessage, setShowLandscapeEndMessage] = useState(false);
   const { registerVideo, unregisterVideo } = useSound();
   
   const fullText = "Turn your device for an immersive experience...";
+  const landscapeEndMessage = "Rotate your phone back to portrait mode to continue the experience";
 
   useEffect(() => {
     const handleResize = () => {
@@ -487,6 +489,49 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
     }
   }, [isLandscape, isMobile, hasStarted]);
 
+  // Detect when video is near the end in landscape mode to show rotation message
+  useEffect(() => {
+    if (!isLandscape || !isMobile || !hasStarted || !videoRef.current) {
+      setShowLandscapeEndMessage(false);
+      return;
+    }
+
+    const video = videoRef.current;
+    const END_THRESHOLD = 3; // Show message in last 3 seconds
+
+    const handleTimeUpdate = () => {
+      if (video.duration && video.currentTime) {
+        const timeRemaining = video.duration - video.currentTime;
+        // Show message when within last 3 seconds
+        if (timeRemaining <= END_THRESHOLD && timeRemaining > 0) {
+          setShowLandscapeEndMessage(true);
+        } else {
+          setShowLandscapeEndMessage(false);
+        }
+      }
+    };
+
+    const handleLoadedMetadata = () => {
+      // Video metadata loaded, can now check duration
+      if (video.duration) {
+        handleTimeUpdate();
+      }
+    };
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+
+    // Check immediately if video is already loaded
+    if (video.readyState >= 1) {
+      handleLoadedMetadata();
+    }
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
+  }, [isLandscape, isMobile, hasStarted]);
+
   // Typewriter effect for portrait message - repeats continuously with fade
   useEffect(() => {
     if (!showText || !showPortraitMessage || isLandscape) {
@@ -667,6 +712,16 @@ const Intro: React.FC<IntroProps> = ({ hasStarted }) => {
       {!isLandscape && isMobile && showText && (
         <div className={`intro__portrait-text-below ${isFading ? 'fading' : ''}`}>
           {displayedText}
+        </div>
+      )}
+      
+      {/* Landscape mode end message - prompts user to rotate to portrait */}
+      {isLandscape && isMobile && showLandscapeEndMessage && (
+        <div className="intro__landscape-end-message">
+          <div className="landscape-end-content">
+            <div className="landscape-end-icon">📱</div>
+            <div className="landscape-end-text">{landscapeEndMessage}</div>
+          </div>
         </div>
       )}
     </div>
