@@ -153,7 +153,7 @@ const App = () => {
                 id="section-1" 
                 title='' 
                 subtitle='The Urban Pioneer' 
-                contentText="Ström's history holds hidden treasures. Collect them all to unlock the Masked Sanctuary."
+                contentText="Ström's history holds hidden treasures.<br/>Collect them all to unlock<br/>the Masked Sanctuary."
               />
               <ScrollingText targetSection=".persona-space.persona-1">
                 <div>
@@ -173,7 +173,7 @@ const App = () => {
                 id="section-2" 
                 title='' 
                 subtitle='Connoisseurs of Speed' 
-                contentText="The pace quickens.<br/>Keep to the track and follow the markers that will guide you to the Masked Sanctuary."
+                contentText="The pace quickens.<br/>Keep to the track and follow the markers that will guide you to<br/>the Masked Sanctuary."
               />
               <ScrollingText targetSection=".persona-space.persona-2">
                 <div>
@@ -191,7 +191,7 @@ const App = () => {
                 title='' 
                 subtitle="Beyond the Horizon's Edge" 
                 titleX="6%" 
-                contentText="The last veil thins. The Masked Sanctuary is within reach."
+                contentText="The last veil thins.<br/>The Masked Sanctuary is within reach."
               />
               <ScrollingText targetSection=".persona-space.persona-3">
                 <div>

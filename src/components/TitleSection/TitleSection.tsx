@@ -134,7 +134,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({ id, title, subtitle, titleX
   ) : (
     <tspan x="50%" dy="1.2em">{subtitle}</tspan>
   )}
-</text>
+            </text>
           </svg>
           <img src={dividerSrc} alt="Divider" className="loader-divider" />
           {showInstructions ? (

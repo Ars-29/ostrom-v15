@@ -262,144 +262,148 @@ export default function ConnoisseursPage() {
   
   return (
     <LabelInfoProvider>
-      <div className="connoisseurs">
-        {/* Sticky header identical styling - hidden initially, shown on scroll */}
-        <div className={`top-header ${showHeader ? 'show-on-scroll' : 'hidden-on-load'}`}>
-          <Logo className="loader-logo move-to-corner" onClick={() => navigate('/')} />
-        </div>
-        <HamburgerMenu
-          items={menuItems}
-          isOpen={isMenuOpen}
-          onToggle={() => setIsMenuOpen(!isMenuOpen)}
-          onClose={() => setIsMenuOpen(false)}
-          position="left"
-        />
+      {/* Only render the Masked Sanctuary content after password verification.
+          Before that, user should see ONLY the password modal (no video launching in the background). */}
+      {isPasswordVerified && (
+        <div className="connoisseurs">
+          {/* Sticky header identical styling - hidden initially, shown on scroll */}
+          <div className={`top-header ${showHeader ? 'show-on-scroll' : 'hidden-on-load'}`}>
+            <Logo className="loader-logo move-to-corner" onClick={() => navigate('/')} />
+          </div>
+          <HamburgerMenu
+            items={menuItems}
+            isOpen={isMenuOpen}
+            onToggle={() => setIsMenuOpen(!isMenuOpen)}
+            onClose={() => setIsMenuOpen(false)}
+            position="left"
+          />
 
-        {/* Header */}
-        <header className="connoisseurs__header">
-          <h1 className="connoisseurs__title">
-            The Masked Sanctuary
-          </h1>
-          <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
-        </header>
+          {/* Header */}
+          <header className="connoisseurs__header">
+            <h1 className="connoisseurs__title">
+              The Masked Sanctuary
+            </h1>
+            <img src={dividerSrc} alt="Divider" className="connoisseurs__divider-img" />
+          </header>
 
-        {/* Description */}
-        <div className="connoisseurs__description">
-          <p className="connoisseurs__lead">
-            A preview of the renaissance of a pioneering Parisian House.
-            <br />
-            <br />
-            Insights into the laps ahead, masterful hands in motion, and a trajectory shaped by trailblazers, are revealed in our Masked Sanctuary.
-            <br />
-            <br />
-            An intimate, invitation-only enclave unlocked by your personal code, where creations and narratives are revealed ahead of the starting flag.
-          </p>
-        </div>
-
-        {/* Hero Video Section */}
-        <section ref={heroRef} className="connoisseurs__hero">
-          <video 
-            ref={videoRef}
-            className="connoisseurs__video"
-            autoPlay 
-            muted={true}
-            loop 
-            playsInline
-            controls={false}
-          >
-            <source src={heroVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </section>
-
-        {/* Main Content */}
-        <main className="connoisseurs__main">
-          {/* Introduction Section */}
-          <section className="connoisseurs__intro">
-            <p className="connoisseurs__text">
-              Touch is our archive.
+          {/* Description */}
+          <div className="connoisseurs__description">
+            <p className="connoisseurs__lead">
+              A preview of the renaissance of a pioneering Parisian House.
               <br />
-              Know-how, revived.
+              <br />
+              Insights into the laps ahead, masterful hands in motion, and a trajectory shaped by trailblazers, are revealed in our Masked Sanctuary.
+              <br />
+              <br />
+              An intimate, invitation-only enclave unlocked by your personal code, where creations and narratives are revealed ahead of the starting flag.
             </p>
+          </div>
+
+          {/* Hero Video Section */}
+          <section ref={heroRef} className="connoisseurs__hero">
+            <video 
+              ref={videoRef}
+              className="connoisseurs__video"
+              autoPlay 
+              muted={true}
+              loop 
+              playsInline
+              controls={false}
+            >
+              <source src={heroVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </section>
 
-          {/* Landscape Image Section */}
-          <section className="connoisseurs__landscape">
-            <div className="connoisseurs__image-wrap">
-              <ImageWithFallback 
-                src={imgLandscape}
-                alt="Landscape view"
-                className="connoisseurs__image-landscape"
-              />
-            </div>
-            <div className="connoisseurs__section-body">
-              {/* Text content commented out - waiting for client to provide content */}
-              {/* <h2 className="connoisseurs__h2">The Journey Begins</h2>
-              <p className="connoisseurs__text" style={{ marginBottom: '1rem' }}>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
-              </p>
+          {/* Main Content */}
+          <main className="connoisseurs__main">
+            {/* Introduction Section */}
+            <section className="connoisseurs__intro">
               <p className="connoisseurs__text">
-                Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.
-              </p> */}
-            </div>
-          </section>
-
-          {/* Two Portrait Images Section */}
-          <section className="connoisseurs__landscape">
-            <div className="connoisseurs__grid-two">
-              <div>
-                <ImageWithFallback 
-                  src={imgPortraitOne}
-                  alt="Portrait view one"
-                  className="connoisseurs__portrait"
-                />
-                {/* Text content commented out - waiting for client to provide content */}
-                {/* <h3 className="connoisseurs__h3">Architectural Elegance</h3>
-                <p className="connoisseurs__text">
-                  At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.
-                </p> */}
-              </div>
-              <div>
-                <ImageWithFallback 
-                  src={imgPortraitTwo}
-                  alt="Portrait view two"
-                  className="connoisseurs__portrait"
-                />
-                {/* Text content commented out - waiting for client to provide content */}
-                {/* <h3 className="connoisseurs__h3">Urban Stories</h3>
-                <p className="connoisseurs__text">
-                  Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias.
-                </p> */}
-              </div>
-            </div>
-          </section>
-
-          {/* Closing Section */}
-          <section className="connoisseurs__closing">
-            {/* Divider image removed - button should match main page contact button */}
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-              <p className="connoisseurs__text" style={{ marginBottom: '1.5rem', fontStyle: 'italic' }}>
-                Where private invitations and whispered news await.
+                Touch is our archive.
+                <br />
+                Know-how, revived.
               </p>
-              <a 
-                href="https://wa.me/your-whatsapp-number" 
-                rel="noopener noreferrer"
-                className="connoisseurs__cta-button"
-              >
-                Join the Inner Circle
-              </a>
-            </div>
-          </section>
-        </main>
+            </section>
 
-        {/* Footer */}
-        <footer className="connoisseurs__footer">
-          <p className="connoisseurs__footer-text">© 2025 The Masked Sanctuary. All rights reserved.</p>
-        </footer>
+            {/* Landscape Image Section */}
+            <section className="connoisseurs__landscape">
+              <div className="connoisseurs__image-wrap">
+                <ImageWithFallback 
+                  src={imgLandscape}
+                  alt="Landscape view"
+                  className="connoisseurs__image-landscape"
+                />
+              </div>
+              <div className="connoisseurs__section-body">
+                {/* Text content commented out - waiting for client to provide content */}
+                {/* <h2 className="connoisseurs__h2">The Journey Begins</h2>
+                <p className="connoisseurs__text" style={{ marginBottom: '1rem' }}>
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+                </p>
+                <p className="connoisseurs__text">
+                  Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt.
+                </p> */}
+              </div>
+            </section>
 
-        {/* Mute Button - same position as main page */}
-        <MuteButton />
-      </div>
+            {/* Two Portrait Images Section */}
+            <section className="connoisseurs__landscape">
+              <div className="connoisseurs__grid-two">
+                <div>
+                  <ImageWithFallback 
+                    src={imgPortraitOne}
+                    alt="Portrait view one"
+                    className="connoisseurs__portrait"
+                  />
+                  {/* Text content commented out - waiting for client to provide content */}
+                  {/* <h3 className="connoisseurs__h3">Architectural Elegance</h3>
+                  <p className="connoisseurs__text">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi.
+                  </p> */}
+                </div>
+                <div>
+                  <ImageWithFallback 
+                    src={imgPortraitTwo}
+                    alt="Portrait view two"
+                    className="connoisseurs__portrait"
+                  />
+                  {/* Text content commented out - waiting for client to provide content */}
+                  {/* <h3 className="connoisseurs__h3">Urban Stories</h3>
+                  <p className="connoisseurs__text">
+                    Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias.
+                  </p> */}
+                </div>
+              </div>
+            </section>
+
+            {/* Closing Section */}
+            <section className="connoisseurs__closing">
+              {/* Divider image removed - button should match main page contact button */}
+              <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                <p className="connoisseurs__text" style={{ marginBottom: '1.5rem', fontStyle: 'italic' }}>
+                  Where private invitations and whispered news await.
+                </p>
+                <a 
+                  href="https://wa.me/your-whatsapp-number" 
+                  rel="noopener noreferrer"
+                  className="connoisseurs__cta-button"
+                >
+                  Join the Inner Circle
+                </a>
+              </div>
+            </section>
+          </main>
+
+          {/* Footer */}
+          <footer className="connoisseurs__footer">
+            <p className="connoisseurs__footer-text">© 2025 The Masked Sanctuary. All rights reserved.</p>
+          </footer>
+
+          {/* Mute Button - same position as main page */}
+          <MuteButton />
+        </div>
+      )}
 
       <PasswordModal
         isOpen={isPasswordModalOpen}
